@@ -2,7 +2,7 @@
 shopt -s histappend  # Append to the history file without rewriting
 shopt -s checkwinsize  # Update LINES and COLUMNS after commands
 
-# Laod modules
+# Load modules
 _SHELL_DEBUG=1
 . ${HOME}/.config/shell/init.sh
 
