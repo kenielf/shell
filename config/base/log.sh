@@ -20,10 +20,7 @@ _warn() {
         _error "log: missing warning message"
     fi
 
-    if [ "${_SHELL_DEBUG}" = "1" ]; then
-        printf -- "\x1b[34m[WARN]\x1b[00m %s\n" "${1}"
-    fi
-
+    printf -- "\x1b[34m[WARN]\x1b[00m %s\n" "${1}"
 }
 
 ## Prints an info message
@@ -39,5 +36,8 @@ _debug() {
     if [ -z "${1}" ]; then
         _error "log: missing debug message"
     fi
-    printf -- "\x1b[36m[DEBUG]\x1b[00m %s\n" "${1}"
+
+    if [ "${_SHELL_DEBUG}" = "1" ]; then
+        printf -- "\x1b[36m[DEBUG]\x1b[00m %s\n" "${1}"
+    fi
 }
