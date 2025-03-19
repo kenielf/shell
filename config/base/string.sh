@@ -22,3 +22,14 @@ _join_sorted() {
     fi
     echo "${1}" | sort | sed 's/ /, /g'
 }
+
+## Checks if a string is a number
+_is_number() {
+    if [ -z "${1}" ]; then
+        _error "string: missing string to verify as number"
+    fi
+
+    if ! (echo "${1}" | grep -P '^[0-9]+$' >/dev/null 2>&1); then
+        return 0
+    fi
+}
