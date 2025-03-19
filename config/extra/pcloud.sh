@@ -9,7 +9,6 @@ _PCLOUD_PASSWORD_FILE="${_PCLOUD_DIR}/password"
 
 ## Load pCloud share
 _pcloud_start() {
-    _debug "pcloud: starting..."
     if ! (pgrep pcloudcc >/dev/null 2>&1); then
         # Make sure the credentials exist
         if [ ! -f "${_PCLOUD_USERNAME_FILE}" ] || \
