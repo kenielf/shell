@@ -44,3 +44,6 @@ _module_load "${_SHELL_MODULES_DIR}/extra"
 # Check dependencies
 [ "${_SHELL_DEBUG}" = "1" ] && _dependency_print
 _dependency_check
+
+# Autostart
+_autostart_run
