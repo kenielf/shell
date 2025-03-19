@@ -12,3 +12,7 @@ eval "$(zoxide init "$(
     echo "${SHELL}" | tr '[:upper:]' '[:lower:]' | awk -F '/' '{print $NF}'
 )")"
 bind "'\C-f':'zi\n'"
+
+## Path Aliases
+export APPDATA="${HOME}/.local/share"
+export APPBIN="${HOME}/.local/bin"
