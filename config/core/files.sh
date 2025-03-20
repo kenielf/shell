@@ -2,13 +2,17 @@ _dependency_add "xdg-open"
 
 ## Shorthand to open files quietly
 open() {
-    xdg-open ${@} >/dev/null 2>&1 &
+    target="."
+    if [ $# -ge 1 ]; then
+        xdg-open ${@} >/dev/null 2>&1 &
+    fi
 }
 
 ## Print the first N lines (1 by default)
 first() {
     if [ -z "${1}" ]; then
         _error "files: missing path to read"
+        return 1
     fi
 
     lines=1
@@ -28,6 +32,7 @@ first() {
 last() {
     if [ -z "${1}" ]; then
         _error "files: missing path to read"
+        return 1
     fi
 
     lines=1
