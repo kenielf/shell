@@ -4,6 +4,7 @@ _dependency_add "zoxide tree"
 mkcd() {
     if [ -z "${1}" ]; then
         _error "navigation: missing path to create and access"
+        return 1
     fi
     mkdir -p "${1}" && cd "${1}"
 }

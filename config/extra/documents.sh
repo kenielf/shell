@@ -4,6 +4,7 @@ _dependency_add "gs"
 pdf_compress() {
     if [ -z "${1}" ]; then
         _error "documents: missing pdf argument"
+        return 1
     fi
 
     LEVEL=250

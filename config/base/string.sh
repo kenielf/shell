@@ -11,6 +11,7 @@ _append() {
 _join() {
     if [ -z "${1}" ]; then
         _error "string: missing string to be joined"
+        return 1
     fi
     echo "${1}" | sed 's/ /, /g'
 }
@@ -19,6 +20,7 @@ _join() {
 _join_sorted() {
     if [ -z "${1}" ]; then
         _error "string: missing string to be joined"
+        return 1
     fi
     echo "${1}" | sort | sed 's/ /, /g'
 }
@@ -27,6 +29,7 @@ _join_sorted() {
 _is_number() {
     if [ -z "${1}" ]; then
         _error "string: missing string to verify as number"
+        return 1
     fi
 
     if ! (echo "${1}" | grep -P '^[0-9]+$' >/dev/null 2>&1); then

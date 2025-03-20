@@ -2,6 +2,7 @@
 _path_add() {
     if [ -z "${1}" ]; then
         _error "user-scripts: missing path to add"
+        return 1
     fi
 
     if [ ! -d "${1}" ]; then

@@ -14,6 +14,7 @@ _pcloud_start() {
         if [ ! -f "${_PCLOUD_USERNAME_FILE}" ] || \
             [ ! -f ${_PCLOUD_PASSWORD_FILE} ]; then
             _error "pcloud: Missing credentials, run pcloudcc-credentials."
+            return 1
         fi
 
         # Start pcloud

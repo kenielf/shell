@@ -9,7 +9,7 @@ _parse_git_branch() {
 git-change-key() {
     # Make sure user is inside of a git repository
     if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        printf -- "\e[31m[ERROR]\e[00m %s\n" "Not a git repository!"
+        _error "git: not a repository"
         return 1
     fi
 

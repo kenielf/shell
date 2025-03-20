@@ -10,6 +10,7 @@ _confirm() {
 _prompt_simple() {
     if [ -z "${1}" ]; then
         _error "input: missing content to prompt"
+        return 1
     fi
     printf -- "%s: " "${1}"
 }
@@ -17,6 +18,7 @@ _prompt_simple() {
 _prompt_newline() {
     if [ -z "${1}" ]; then
         _error "input: missing content to prompt"
+        return 1
     fi
     printf -- "%s\n > " "${1}"
 }
