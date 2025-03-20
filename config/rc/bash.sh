@@ -3,7 +3,7 @@ shopt -s histappend  # Append to the history file without rewriting
 shopt -s checkwinsize  # Update LINES and COLUMNS after commands
 
 # Load modules
-_SHELL_DEBUG=1
+# _SHELL_DEBUG=1  # Uncomment this to enable debug messages
 . ${HOME}/.config/shell/init.sh
 
 ## TODO: Prompt
