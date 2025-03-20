@@ -13,7 +13,9 @@ _dependency_add() {
 _dependency_check() {
     missing=""
     missing_count=0
-    for dep in ${_SHELL_DEPENDENCIES}; do
+    for dep in $(
+        echo "${_SHELL_DEPENDENCIES}" | tr ' ' '\n' | sort | uniq | tr '\n' ' '
+    ); do
         # Check if the command exists on the system
         if ! (command -v "${dep}" >/dev/null 2>&1); then
             missing="$(_append "${missing}" "${dep}")"
