@@ -1,3 +1,6 @@
+## Interactive Safeguard
+[[ $- != *i* ]] && return
+
 ## Options
 shopt -s histappend  # Append to the history file without rewriting
 shopt -s checkwinsize  # Update LINES and COLUMNS after commands
