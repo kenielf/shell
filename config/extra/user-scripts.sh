@@ -12,5 +12,5 @@ _path_add() {
 }
 
 ## Extend path to include user scripts and binaries
-_path_add "${HOME}/.scripts"
+_path_add "${HOME}/.scripts/src"
 _path_add "${HOME}/.local/bin"
