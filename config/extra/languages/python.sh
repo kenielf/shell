@@ -22,7 +22,7 @@ pyenv() {
     . "${_env_dir}/bin/activate"
 
     if [ -f "./requirements.txt" ]; then
-        _debug "python: installing environment dependencies"
+        _info "python: installing environment dependencies"
         _cmd="uv"
         if ! (command -v "${_cmd}" >/dev/null 2>&1); then
             _cmd "python3 -m"
