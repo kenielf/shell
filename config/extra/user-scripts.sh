@@ -6,9 +6,10 @@ _path_add() {
     fi
 
     if [ ! -d "${1}" ]; then
-        mkdir -p "${1}" && \
-            PATH="${PATH}:${1}"
+        mkdir -p "${1}" || return 1
     fi
+    _debug "user-scripts: adding '${1}' to \$PATH"
+    PATH="${PATH}:${1}"
 }
 
 ## Extend path to include user scripts and binaries
