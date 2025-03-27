@@ -12,5 +12,9 @@ shopt -s checkwinsize  # Update LINES and COLUMNS after commands
 ## TODO: Prompt
 PS_PATH="\[\e[90m\]\W\[\e[00m\]"
 PS_PROMPT="\[\e[35m\]λ\[\e[00m\] "
-export PS1=" ${PS_PATH}\$(_parse_git_branch) ${PS_PROMPT}"
+PS_GIT="\$(_git_parse_branch)"
+PS_JOBS="\[\e[90m\]\$(_jobs_parse_numbers)\[\e[00m\]"
 
+PS1=" ${PS_PATH}${PS_GIT}${PS_JOBS} ${PS_PROMPT}"
+
+export PS1

@@ -1,7 +1,7 @@
 _dependency_add "git"
 
 ## Show the current git branch or nothing
-_parse_git_branch() {
+_git_parse_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/  (\1)/'
 }
 
