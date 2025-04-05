@@ -1,9 +1,16 @@
 ## A dedicated function to append text with a space separator
 _append() {
+    # Separator
+    if [ "${3}" ]; then
+        separator="${3}"
+    else
+        separator=" "
+    fi
+
     if [ -z "${1}" ]; then
         printf -- "${2}"
     else
-        printf -- "${1} ${2}"
+        printf -- "${1}${separator}${2}"
     fi
 }
 
