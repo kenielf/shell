@@ -14,6 +14,7 @@ _DEFAULT_THEME="catppuccin-mocha"
 if command -v eza >/dev/null 2>&1; then
     # Generate the theme when needed
     if [ -z "${LS_COLORS}" ] && (command -v vivid >/dev/null 2>&1); then
+        _debug "navigation: generating theme"
         export LS_COLORS="$(vivid generate "${_DEFAULT_THEME}")"
     fi
 
