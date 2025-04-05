@@ -1,4 +1,6 @@
 # Custom Modular Shell Configuration
+![Shell Startup](/assets/showcase.png)
+
 ## How it works
 This configuration uses the concept of modules to dynamically load components 
 that I use in my daily life, whilst checking for dependencies and having 
