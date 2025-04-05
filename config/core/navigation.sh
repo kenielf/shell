@@ -1,4 +1,4 @@
-_dependency_add "zoxide tree"
+_dependency_add "zoxide tree eza vivid"
 
 ## Creates a directory if needed and accesses it
 mkcd() {
@@ -8,6 +8,19 @@ mkcd() {
     fi
     mkdir -p "${1}" && cd "${1}"
 }
+
+## Listing
+_DEFAULT_THEME="catppuccin-mocha"
+if command -v eza >/dev/null 2>&1; then
+    # Generate the theme when needed
+    if [ -z "${LS_COLORS}" ] && (command -v vivid >/dev/null 2>&1); then
+        export LS_COLORS="$(vivid generate "${_DEFAULT_THEME}")"
+    fi
+
+    alias l="eza"
+    alias ls="eza -lh"
+    alias la="eza -lhA"
+fi
 
 ## Visualization
 _TREE_IGNORE='.git|.env|.venv|.idea|.vscode|__pycache__'
