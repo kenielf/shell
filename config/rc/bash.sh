@@ -9,6 +9,21 @@ shopt -s checkwinsize  # Update LINES and COLUMNS after commands
 # _SHELL_DEBUG=1  # Uncomment this to enable debug messages
 . ${HOME}/.config/shell/init.sh
 
+# Disable freezing
+stty -ixon
+
+# Reload configuration via keybind
+reload() {
+    clear
+    if [ "${1}" = "-d" ]; then
+        _SHELL_DEBUG=1 . ~/.bashrc
+    else
+        _SHELL_DEBUG=0 . ~/.bashrc
+    fi
+}
+
+bind "'\C-s':'reload\n'"
+
 ## TODO: Prompt
 PS_PATH="\[\e[90m\]\W\[\e[00m\]"
 PS_PROMPT="\[\e[35m\]λ\[\e[00m\] "
