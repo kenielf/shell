@@ -31,5 +31,21 @@ _dependency_check() {
 
 ## Prints all dependencies (used for debugging)
 _dependency_print() {
-    _info "dependency: dependencies = [$(_join_sorted "${_SHELL_DEPENDENCIES}")]"
+    _max_size="$((COLUMNS - 22))" # $COLUMNS - '[INFO] dependencies: '
+    sorted="$(echo "${_SHELL_DEPENDENCIES}" | tr ' ' '\n' | sort | uniq)"
+
+    unset deps
+    for dep in ${sorted}; do
+        next="$(_append "${deps}" "${dep}" ", ")"
+        next_size="$(echo "${next}" | wc -c)"
+        if [ "${next_size}" -ge "${_max_size}" ]; then
+            _info "dependencies: ${deps}"
+            next=""
+        fi
+        deps="${next}"
+    done
+
+    if [ -n "${next}" ]; then
+        _info "dependencies: ${deps}"
+    fi
 }
