@@ -22,7 +22,8 @@ dlvid() {
     fi
 
     yt-dlp \
-        -f bestvideo*+bestaudio/best --embed-thumbnail --add-metadata \
-        --downloader aria2c --downloader-args="'aria2c:${_ARIA2C_ARGS}'" \
-        -o '%(title)s.%(ext)s'
+        -f "bestvideo*+bestaudio/best" --embed-thumbnail --add-metadata \
+        --downloader "aria2c" --downloader-args="aria2c:${_ARIA2C_ARGS}" \
+        -o "%(title)s.%(ext)s" "${1}"
+}
 }
