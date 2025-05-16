@@ -1,5 +1,8 @@
 _dependency_add "git"
 
+GIT_FETCH_TIMESTAMP_FILE="./.git/git-fetch.timestamp"
+GIT_FETCH_TIMEOUT=300  # 5 Minute
+
 ## Show the current git branch or nothing
 _git_parse_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/  (\1)/'
@@ -61,4 +64,56 @@ git-change-key() {
             sleep 0.5
         fi
     done
+}
+
+_git_log_remote() {
+    if [ ! -d "./.git" ]; then
+        _error "git: not a repository"
+        return 1
+    fi
+
+    if [ -z "${1}" ]; then
+        _error "git: missing branch argument"
+        return 1
+    fi
+
+    git log --color=always "${1}" || \
+        git log --color=always "origin/${1}"
+}
+export -f _git_log_remote
+
+## Interactively change branch
+gci() {
+    if [ ! -d "./.git" ]; then
+        _error "git: not a repository"
+        return 1
+    fi
+
+    # Update branch references
+    if [ -f "${GIT_FETCH_TIMESTAMP_FILE}" ]; then
+        now="$(date -u +"%s")"
+        last_modified="$(date -d "$(
+            stat "${GIT_FETCH_TIMESTAMP_FILE}" | grep -Po "Modify: \K.*"
+        )" +"%s")"
+
+        if [ "${now}" -gt "$((last_modified + GIT_FETCH_TIMEOUT))" ]; then
+            _info "git: fetching branches"
+            git fetch -a >/dev/null
+            touch "${GIT_FETCH_TIMESTAMP_FILE}"
+        fi
+    fi
+    branches="$(git branch -a)"
+
+    # Select a branch
+    selection="$(
+        echo "${branches}" | sed -re 's;remotes/origin/;;g;s;^  |\* ;;g' | \
+            sort | uniq | grep -v 'HEAD' | \
+        fzf --cycle --reverse --ansi \
+            --preview '_git_log_remote {}' --prompt="Branch > "
+    )"
+
+    if [ -n "${selection}" ]; then
+        _info "git: switching to branch '${selection}'"
+        git checkout "${selection}"
+    fi
 }
