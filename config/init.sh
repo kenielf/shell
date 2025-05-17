@@ -21,6 +21,15 @@ alias _debug="[ \"\${_SHELL_DEBUG}\" = \"1\" ] && _msg '\x1b[36m[DEBUG]\x1b[00m'
 _SHELL_MODULES_DIR="${HOME}/.config/shell"
 _SHELL_MODULES_LOADED=""
 
+# Enable function exporting
+_export_function() {
+    if [ -z "${1}" ]; then
+        _error "shell: missing command to be exported"
+    fi
+
+    export -f "${1}"  # Maybe use autoload for zsh, will need more research
+}
+
 ## Loads a specific module (recursively if module is a directory)
 _module_load() {
     module="${1}"
