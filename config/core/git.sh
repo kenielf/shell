@@ -80,7 +80,7 @@ _git_log_remote() {
     git log --color=always "${1}" || \
         git log --color=always "origin/${1}"
 }
-export -f _git_log_remote
+_export_function _git_log_remote
 
 ## Interactively change branch
 gci() {
