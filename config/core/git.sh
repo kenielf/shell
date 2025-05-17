@@ -89,18 +89,27 @@ gci() {
         return 1
     fi
 
-    # Update branch references
-    if [ -f "${GIT_FETCH_TIMESTAMP_FILE}" ]; then
+    # Check if updating references is necessary
+    _fetch=false
+    if [ "${1}" = "-f" ]; then
+        _fetch=true  # Force update
+    elif [ -f "${GIT_FETCH_TIMESTAMP_FILE}" ]; then
+        # Grab unix timestamps (whole integers)
         now="$(date -u +"%s")"
         last_modified="$(date -d "$(
             stat "${GIT_FETCH_TIMESTAMP_FILE}" | grep -Po "Modify: \K.*"
         )" +"%s")"
 
         if [ "${now}" -gt "$((last_modified + GIT_FETCH_TIMEOUT))" ]; then
-            _info "git: fetching branches"
-            git fetch -a >/dev/null
-            touch "${GIT_FETCH_TIMESTAMP_FILE}"
+            _fetch=true
         fi
+    fi
+
+    # Update branch references
+    if [ "${_fetch}" = true ]; then
+        _info "git: fetching branches"
+        git fetch -a >/dev/null
+        touch "${GIT_FETCH_TIMESTAMP_FILE}"
     fi
     branches="$(git branch -a)"
 
