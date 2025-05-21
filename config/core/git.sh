@@ -103,6 +103,8 @@ gci() {
         if [ "${now}" -gt "$((last_modified + GIT_FETCH_TIMEOUT))" ]; then
             _fetch=true
         fi
+    else
+        _fetch=true  # Fetch timestamp file does not exist - needs checking
     fi
 
     # Update branch references
