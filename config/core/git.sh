@@ -1,4 +1,4 @@
-_dependency_add "git"
+_dependency_add "git fzf"
 
 GIT_FETCH_TIMESTAMP_FILE="./.git/git-fetch.timestamp"
 GIT_FETCH_TIMEOUT=300  # 5 Minute
