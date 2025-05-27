@@ -1,7 +1,7 @@
 _dependency_add "xclip zoxide tree eza vivid"
 
 # Send working directory to clipboard
-alias pwx="pwd | xclip -sel c"
+alias pwx="pwd | tr -d '\n' | xclip -sel c"
 
 ## Creates a directory if needed and accesses it
 mkcd() {
