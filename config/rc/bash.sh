@@ -42,5 +42,9 @@ PS_GIT="\$(_git_parse_branch)"
 PS_JOBS="\[\e[90m\]\$(_jobs_parse_numbers)\[\e[00m\]"
 
 PS1=" ${PS_PATH}${PS_GIT}${PS_JOBS} ${PS_PROMPT}"
-
 export PS1
+
+export RPS1="\$(_git_parse_name)"
+
+## Clearing
+bind -x '"\C-l": clear -x; ${PROMPT_COMMAND}'
