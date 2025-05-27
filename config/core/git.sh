@@ -2,10 +2,53 @@ _dependency_add "git fzf"
 
 GIT_FETCH_TIMESTAMP_FILE="./.git/git-fetch.timestamp"
 GIT_FETCH_TIMEOUT=300  # 5 Minute
+GIT_EXTENSION_FILE="${HOME}/.config/git-extras.config"
 
 ## Show the current git branch or nothing
 _git_parse_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/  (\1)/'
+}
+
+_git_parse_name() {
+    if [ -d "./.git" ]; then
+        name="$(git config --list | tac | grep -m1 -Po '^user\.name=\K.*')"
+        email="$(git config --list | tac | grep -m1 -Po '^user\.email=\K.*')"
+        if [ -n "${name}" ] && [ -n "${email}" ]; then
+            printf -- "%s (%s)\n" "${name}" "${email}"
+        fi
+    fi
+}
+
+_git_register_name_for_key() {
+    if [ -z "${1}" ] || [ -z "${2}" ]; then
+        _error "git: missing arguments to register a name to a key"
+        return 1
+    fi
+
+    if (grep -P "^${1}" "${GIT_EXTENSION_FILE}" >/dev/null 2>&1); then
+        sed -i "s/^${1},.*/${1},${2}" "${GIT_EXTENSION_FILE}"
+    else
+        printf -- "%s,%s"  "${1}" "${2}" >> "${GIT_EXTENSION_FILE}"
+    fi
+}
+
+_git_check_name_for_key() {
+    if [ -z "${1}" ]; then
+        _error "git: missing key to check"
+        return 1
+    fi
+
+    # Make sure that the extension file exists
+    if [ ! -f "${GIT_EXTENSION_FILE}" ]; then
+        printf -- "# vi: ft=csv\n" > "${GIT_EXTENSION_FILE}"
+    fi
+
+    result="$(grep -m1 -P "^${1}" "${GIT_EXTENSION_FILE}" 2>/dev/null)"
+    if [ -z "${result}" ]; then
+        _debug "git: key not registered"
+    else
+        echo "${result}" | awk -F ',' '{ print $2 }'
+    fi
 }
 
 ## Change git signing key interactively
@@ -44,18 +87,22 @@ git-change-key() {
 
         if [ "${choice}" -ge 1 ] && [ "${choice}" -le "${count}" ]; then
             # Getting fingerprint and email
-            fingerprint="$(
-                echo "${keys}" | sed -n "${choice}p" | cut -d '|' -f1
-            )"
-            email="$(
-                echo "${keys}" | sed -n "${choice}p" | cut -d '|' -f3 | \
-                    grep -oP '<.*>' | tr -d '<>'
-            )"
+            fingerprint="$(echo "${keys}" | sed -n "${choice}p" | cut -d '|' -f1)"
+            key="$(echo "${keys}" | sed -n "${choice}p" | cut -d '|' -f2)"
+            email="$(echo "${keys}" | sed -n "${choice}p" | cut -d '|' -f3 | \
+                grep -oP '<.*>' | tr -d '<>')"
+            name="$(_git_check_name_for_key "${key}")"
+            if [ -z "${name}" ]; then
+                _prompt_newline "Please set your user.name for the key '${key}'"
+                read -r name
+                _git_register_name_for_key "${key}" "${name}"
+            fi
 
             # Set the configurations
             echo "Setting key..."
             git config --local user.signingkey "${fingerprint}"
             git config --local user.email "${email}"
+            git config --local user.name "${name}"
 
             # Finish
             break
