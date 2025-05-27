@@ -24,6 +24,17 @@ reload() {
 
 bind "'\C-s':'reload\n'"
 
+## Prompt handler
+function prepare_prompt() {
+    columns="$(tput cols)"
+    right_text="$(eval "echo \"${RPS1}\"")"
+    right_text_length=${#right_text}
+    printf '%*s%s\r' "$((columns - right_text_length))" '' "${right_text}"
+}
+
+export PROMPT_COMMAND=prepare_prompt
+
+
 ## TODO: Prompt
 PS_PATH="\[\e[90m\]\W\[\e[00m\]"
 PS_PROMPT="\[\e[35m\]λ\[\e[00m\] "
