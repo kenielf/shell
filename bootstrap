@@ -2,10 +2,11 @@
 AUTHOR="kenielf"
 PROJECT="shell"
 TARGET_DIR="${HOME}/.local/share/${PROJECT}"
+INIT_FILE="${TARGET_DIR}/config/init"
 
 if [ ! -d "${TARGET_DIR}" ]; then
     if ! command -v git >/dev/null 2>&1; then
-        printf -- "\e[31m[ERROR] %b\n" "bootstrap: missing git command"
+        printf -- "\e[31m[ERROR]\e[00m %b\n" "bootstrap: missing git command"
         return 1
     else
         git clone "https://github.com/${AUTHOR}/${PROJECT}" \
@@ -13,5 +14,5 @@ if [ ! -d "${TARGET_DIR}" ]; then
     fi
 
     # shellcheck source=/dev/null
-    . "${TARGET_DIR}/init.sh"  
+    . "${INIT_FILE}"  
 fi
