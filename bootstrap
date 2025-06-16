@@ -1,0 +1,17 @@
+# vi: ft=sh
+AUTHOR="kenielf"
+PROJECT="shell"
+TARGET_DIR="${HOME}/.local/share/${PROJECT}"
+
+if [ ! -d "${TARGET_DIR}" ]; then
+    if ! command -v git >/dev/null 2>&1; then
+        printf -- "\e[31m[ERROR] %b\n" "bootstrap: missing git command"
+        return 1
+    else
+        git clone "https://github.com/${AUTHOR}/${PROJECT}" \
+            --depth 1 --branch "bootstrap" "${TARGET_DIR}"
+    fi
+
+    # shellcheck source=/dev/null
+    . "${TARGET_DIR}/init.sh"  
+fi
