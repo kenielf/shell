@@ -43,7 +43,7 @@ kscfg() {
 
     case "${1}" in
         "setup")
-            for module in ${_KSCFG_MODULE_DIR}/{base,core}; do
+            for module in "${_KSCFG_MODULE_DIR}"/{base,core}/*; do
                 # shellcheck source=/dev/null
                 . "${module}"
                 if [ -z "${_KSCFG_MODULES_LOADED}" ]; then
