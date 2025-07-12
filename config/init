@@ -63,7 +63,7 @@ kscfg() {
                 if [ -z "${_KSCFG_MODULES_LOADED}" ]; then
                     _KSCFG_MODULES_LOADED="module"
                 else
-                    _KSCFG_MODULES_LOADED="${_KSCFG_MODULES_LOADED}\n${module}"
+                    _KSCFG_MODULES_LOADED="${_KSCFG_MODULES_LOADED} ${module}"
                 fi
             done
             _debug "kscfg: todo: implement"
