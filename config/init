@@ -31,6 +31,7 @@ alias   _error="_msg '\x1b[31m[ERROR]\x1b[00m'"
 kscfg() {
     if [ -z "${1}" ]; then
         _error "kscfg: missing 'action' argument"
+        return "${_KSCFG_INVALID_USAGE}"
     fi
 
     case "${1}" in
