@@ -1,4 +1,22 @@
 # vi: ft=sh
-print() { if [ -n "${1}" ]; then printf -- "%s\n" "${1}"; fi }
+# Exit Codes
+_KSCFG_SUCCESS=0
+_KSCFG_ERROR=1
+_KSCFG_INVALID_USAGE=2
+
+# Logging Functions
+## Simple print alias
+## print <message:str>
+alias print="printf -- '%s\n'"
+
+## Write custom message to stdout (should not be used outside of init)
+## _msg <prefix:str> <message:str>
+_msg() {
+    if [ -z "${1}" ] || [ -z "${2}" ]; then
+        return "${_KSCFG_INVALID_USAGE}"
+    fi
+
+    printf -- "%s %b\n" "${1}" "${2}"
+}
 
 print "test"
