@@ -61,7 +61,7 @@ kscfg() {
                 # shellcheck source=/dev/null
                 . "${module}"
                 if [ -z "${_KSCFG_MODULES_LOADED}" ]; then
-                    _KSCFG_MODULES_LOADED="module"
+                    _KSCFG_MODULES_LOADED="${module}"
                 else
                     _KSCFG_MODULES_LOADED="${_KSCFG_MODULES_LOADED} ${module}"
                 fi
