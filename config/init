@@ -27,4 +27,18 @@ alias    _warn="_msg '\x1b[33m[WARN]\x1b[00m'"
 alias _success="_msg '\x1b[32m[SUCCESS]\x1b[00m'"
 alias   _error="_msg '\x1b[31m[ERROR]\x1b[00m'"
 
-print "test"
+## The main kscfg command
+kscfg() {
+    if [ -z "${1}" ]; then
+        _error "kscfg: missing 'action' argument"
+    fi
+
+    case "${1}" in
+        "setup")
+            _debug "kscfg: todo: implement"
+            ;;
+        "help" | *)
+            _debug "kscfg: todo: implement"
+            ;;
+    esac
+}
