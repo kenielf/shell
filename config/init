@@ -16,7 +16,7 @@ _msg() {
         return "${_KSCFG_INVALID_USAGE}"
     fi
 
-    printf -- "%s %b\n" "${1}" "${2}"
+    printf -- "%b %b\n" "${1}" "${2}"
 }
 
 ## Log level aliases
