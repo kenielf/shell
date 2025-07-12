@@ -33,6 +33,20 @@ alias   _error="_msg '\x1b[31m[ERROR]\x1b[00m'"
 # Module Functions
 _KSCFG_MODULE_DIR="${KSCFG_DIR}/config"
 _KSCFG_MODULES_LOADED=""
+_KSCFG_SHELL="$(echo "${SHELL}" | awk -F '/' '{print $NF}')"
+
+## Exports a function to be used externally
+## _export_function <function:callable>
+_export_function() {
+    if [ -z "${1}" ]; then
+        _error "export_function: missing 'function' argument"
+        return "${_KSCFG_INVALID_USAGE}"
+    fi
+
+    if [ "${_KSCFG_SHELL}" = "bash" ]; then
+        export -f "${1?}"
+    fi
+}
 
 ## The main kscfg command
 kscfg() {
