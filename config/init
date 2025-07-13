@@ -31,9 +31,9 @@ alias _success="_msg '\x1b[32m[SUCCESS]\x1b[00m'"
 alias   _error="_msg '\x1b[31m[ERROR]\x1b[00m'"
 
 # Module Functions
-_KSCFG_MODULE_DIR="${KSCFG_DIR}/config"
-_KSCFG_MODULES_LOADED=""
-_KSCFG_SHELL="$(echo "${SHELL}" | awk -F '/' '{print $NF}')"
+export _KSCFG_MODULE_DIR="${KSCFG_DIR}/config"
+export _KSCFG_MODULES_LOADED=""
+export _KSCFG_SHELL="$(echo "${SHELL}" | awk -F '/' '{print $NF}')"
 
 ## Exports a function to be used externally
 ## _export_function <function:callable>
