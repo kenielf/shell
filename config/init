@@ -92,7 +92,7 @@ kscfg() {
             changes="$(git -C "${KSCFG_DIR}" status -uno)"
             if [ -n "${changes}" ]; then
                 git -C "${KSCFG_DIR}" pull | \
-                    grep -P '^Updating' 2>/dev/null && \
+                    grep --color=never -P '^Updating' 2>/dev/null && \
                     kscfg reload || return "${_KSCFG_ERROR}"
             fi
             ;;
