@@ -51,6 +51,9 @@ _export_function() {
 ## Helper function that shows command usage for kscfg
 _kscfg_help() {
     print "kscfg: by ${AUTHOR}"
+    print "  -s | setup)    sets up the environment"
+    print "  -l | list)     lists loaded modules"
+    print "  -r | reload)   reload the environment"
 }
 
 _kscfg_load() {
