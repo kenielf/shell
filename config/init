@@ -53,6 +53,18 @@ _kscfg_help() {
     print "kscfg: by ${AUTHOR}"
 }
 
+_kscfg_load() {
+    for module in "${_KSCFG_MODULE_DIR}"/{base,core}/*; do
+        # shellcheck source=/dev/null
+        . "${module}"
+        if [ -z "${_KSCFG_MODULES_LOADED}" ]; then
+            _KSCFG_MODULES_LOADED="${module}"
+        else
+            _KSCFG_MODULES_LOADED="${_KSCFG_MODULES_LOADED} ${module}"
+        fi
+    done
+}
+
 ## The main kscfg command
 kscfg() {
     if [ -z "${1}" ]; then
@@ -62,15 +74,7 @@ kscfg() {
 
     case "${1}" in
         "-s" | "setup")
-            for module in "${_KSCFG_MODULE_DIR}"/{base,core}/*; do
-                # shellcheck source=/dev/null
-                . "${module}"
-                if [ -z "${_KSCFG_MODULES_LOADED}" ]; then
-                    _KSCFG_MODULES_LOADED="${module}"
-                else
-                    _KSCFG_MODULES_LOADED="${_KSCFG_MODULES_LOADED} ${module}"
-                fi
-            done
+            _kscfg_load
             _debug "kscfg: todo: implement"
             ;;
         "-l" | "list")
