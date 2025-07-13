@@ -79,9 +79,9 @@ kscfg() {
             source "${HOME}/.bashrc"
             ;;
         "-u" | "update")
-            changes="$(git remote update 2&>/dev/null && \
-                git status -uno
-            )"
+            git remote update >/dev/null 2>&1
+            changes="$(git status -uno)"
+            echo "${changes}"
             if [ -n "${changes}" ]; then
                 cd "${KSCFG_DIR}" && \
                     git pull && \
