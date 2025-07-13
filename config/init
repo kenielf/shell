@@ -79,13 +79,10 @@ kscfg() {
             source "${HOME}/.bashrc"
             ;;
         "-u" | "update")
-            git remote update >/dev/null 2>&1
-            changes="$(git status -uno)"
-            echo "${changes}"
+            git -C "${KSCFG_DIR}" remote update >/dev/null 2>&1
+            changes="$(git -C "${KSCFG_DIR}" status -uno)"
             if [ -n "${changes}" ]; then
-                cd "${KSCFG_DIR}" && \
-                    git pull && \
-                    cd - || return "${_KSCFG_INVALID_USAGE}"
+                    git -C "${KSCFG_DIR}" pull
             fi
             kscfg reload
             ;;
