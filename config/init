@@ -56,7 +56,7 @@ kscfg() {
     fi
 
     case "${1}" in
-        "setup")
+        "-s" | "setup")
             for module in "${_KSCFG_MODULE_DIR}"/{base,core}/*; do
                 # shellcheck source=/dev/null
                 . "${module}"
@@ -68,12 +68,12 @@ kscfg() {
             done
             _debug "kscfg: todo: implement"
             ;;
-        "list")
+        "-l" | "list")
             for module in ${_KSCFG_MODULES_LOADED}; do
                 print "${module}"
             done
             ;;
-        "update")
+        "-u" | "update")
             changes="$(git remote update 2&>/dev/null && \
                 git status -uno
             )"
@@ -83,7 +83,7 @@ kscfg() {
                     cd - || return "${_KSCFG_INVALID_USAGE}"
             fi
             ;;
-        "help" | *)
+        "-h" | "help" | *)
             print "kscfg: by ${AUTHOR}"
             ;;
     esac
