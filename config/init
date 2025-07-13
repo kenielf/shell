@@ -82,10 +82,10 @@ kscfg() {
             git -C "${KSCFG_DIR}" remote update >/dev/null 2>&1
             changes="$(git -C "${KSCFG_DIR}" status -uno)"
             if [ -n "${changes}" ]; then
-                _info "kscfg: updating..."
-                git -C "${KSCFG_DIR}" pull
+                git -C "${KSCFG_DIR}" pull | \
+                    grep -P '^Updating' 2>/dev/null && \
+                    kscfg reload || return "${_KSCFG_ERROR}"
             fi
-            kscfg reload
             ;;
         "-h" | "help" | *)
             print "kscfg: by ${AUTHOR}"
