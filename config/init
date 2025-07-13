@@ -73,6 +73,16 @@ kscfg() {
                 print "${module}"
             done
             ;;
+        "update")
+            changes="$(git remote update 2&>/dev/null && \
+                git status -uno
+            )"
+            if [ -n "${changes}" ]; then
+                cd "${KSCFG_DIR}" && \
+                    git pull && \
+                    cd - || return "${_KSCFG_INVALID_USAGE}"
+            fi
+            ;;
         "help" | *)
             print "kscfg: by ${AUTHOR}"
             ;;
