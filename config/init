@@ -48,6 +48,11 @@ _export_function() {
     fi
 }
 
+## Helper function that shows command usage for kscfg
+_kscfg_help() {
+    print "kscfg: by ${AUTHOR}"
+}
+
 ## The main kscfg command
 kscfg() {
     if [ -z "${1}" ]; then
@@ -87,8 +92,12 @@ kscfg() {
                     kscfg reload || return "${_KSCFG_ERROR}"
             fi
             ;;
-        "-h" | "help" | *)
-            print "kscfg: by ${AUTHOR}"
+        "-h" | "help")
+            _kscfg_help
             ;;
+        *)
+            _error "kscfg: invalid 'action' argument"
+            _kscfg_help
+            return "${_KSCFG_INVALID_USAGE}"
     esac
 }
