@@ -82,7 +82,8 @@ kscfg() {
             git -C "${KSCFG_DIR}" remote update >/dev/null 2>&1
             changes="$(git -C "${KSCFG_DIR}" status -uno)"
             if [ -n "${changes}" ]; then
-                    git -C "${KSCFG_DIR}" pull
+                _info "kscfg: updating..."
+                git -C "${KSCFG_DIR}" pull
             fi
             kscfg reload
             ;;
