@@ -8,9 +8,9 @@ _append() {
     fi
 
     if [ -z "${1}" ]; then
-        printf -- "${2}"
+        printf -- "%s" "${2}"
     else
-        printf -- "${1}${separator}${2}"
+        printf -- "%s%s%s" "${1}" "${separator}" "${2}"
     fi
 }
 
@@ -20,7 +20,7 @@ _join() {
         _error "string: missing string to be joined"
         return 1
     fi
-    echo "${1}" | sed 's/ /, /g'
+    echo "${1/ /, }"
 }
 
 ## Sorts and joins a space separated string with comas (for printing)
