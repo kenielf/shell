@@ -1,4 +1,8 @@
+_kscfg_dependency_add "ncal"
+
 ## ncal shortcut
-cal() {
-    ncal -b ${@}
-}
+if ! command -v cal >/dev/null; then
+    cal() {
+        ncal -b "${@}"
+    }
+fi

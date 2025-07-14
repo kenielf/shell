@@ -1,20 +1,20 @@
-_SHELL_DEPENDENCIES=""
+_KSCFG_SHELL_DEPENDENCIES=""
 
 ## Adds a dependency from a module to the shell dependency list
-_dependency_add() {
+_kscfg_dependency_add() {
     if [ -n "${1}" ]; then
-        for dep in "${1}"; do
-            _SHELL_DEPENDENCIES="$(_append "${_SHELL_DEPENDENCIES}" "${1}")"
+        for dep in ${1}; do
+            _KSCFG_SHELL_DEPENDENCIES="$(_append "${_KSCFG_SHELL_DEPENDENCIES}" "${1}")"
         done
     fi
 }
 
 ## Checks for any missing dependencies
-_dependency_check() {
+_kscfg_dependency_check() {
     missing=""
     missing_count=0
     for dep in $(
-        echo "${_SHELL_DEPENDENCIES}" | tr ' ' '\n' | sort | uniq | tr '\n' ' '
+        echo "${_KSCFG_SHELL_DEPENDENCIES}" | tr ' ' '\n' | sort | uniq | tr '\n' ' '
     ); do
         # Check if the command exists on the system
         if ! (command -v "${dep}" >/dev/null 2>&1); then
@@ -30,14 +30,14 @@ _dependency_check() {
 }
 
 ## Prints all dependencies (used for debugging)
-_dependency_print() {
+_kscfg_dependency_print() {
     _max_size="$((COLUMNS - 22))" # $COLUMNS - '[INFO] dependencies: '
-    sorted="$(echo "${_SHELL_DEPENDENCIES}" | tr ' ' '\n' | sort | uniq)"
+    sorted="$(echo "${_KSCFG_SHELL_DEPENDENCIES}" | tr ' ' '\n' | sort | uniq)"
 
     unset deps
     for dep in ${sorted}; do
         next="$(_append "${deps}" "${dep}" ", ")"
-        next_size="$(echo "${next}" | wc -c)"
+        next_size="${#next}"
         if [ "${next_size}" -ge "${_max_size}" ]; then
             _info "dependencies: ${deps}"
             next=""
