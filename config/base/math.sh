@@ -10,7 +10,7 @@ min() {
         [ "${arg}" -lt "${min}" ] && min="${arg}"
     done
 
-    printf -- "${min}"
+    printf -- "%s" "${min}"
 }
 
 ## Gets the maximum of two values
@@ -25,5 +25,5 @@ max() {
         [ "${arg}" -lt "${max}" ] && max="${arg}"
     done
 
-    printf -- "${max}"
+    printf -- "%s" "${max}"
 }
