@@ -93,9 +93,8 @@ kscfg() {
             done
             ;;
         "-r" | "reload")
-            # TODO: This should not be implemented like this - temporary only
             # shellcheck source=/dev/null
-            source "${HOME}/.bashrc"
+            source "${HOME}/.${_KSCFG_SHELL}rc"
             ;;
         "-u" | "update")
             git -C "${KSCFG_DIR}" remote update >/dev/null 2>&1
