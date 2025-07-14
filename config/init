@@ -85,7 +85,11 @@ kscfg() {
     case "${1}" in
         "-s" | "setup")
             _kscfg_load
-            _debug "kscfg: todo: implement"
+            if [ "${KSCFG_DEBUG}" ]; then
+                _kscfg_dependency_print
+            fi
+            _kscfg_dependency_check
+            _kscfg_autostart_run
             ;;
         "-l" | "list")
             for module in ${_KSCFG_MODULES_LOADED}; do
