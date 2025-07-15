@@ -1,4 +1,4 @@
-_dependency_add "gpg"
+_kscfg_dependency_add "gpg"
 
 ## Encrypts the content passed as an argument
 _encrypt() {

@@ -1,4 +1,4 @@
-_dependency_add "xclip zoxide tree eza vivid"
+_kscfg_dependency_add "xclip zoxide tree eza vivid"
 
 # Send working directory to clipboard
 alias pwx="pwd | tr -d '\n' | xclip -sel c"

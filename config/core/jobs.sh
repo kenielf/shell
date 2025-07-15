@@ -1,4 +1,4 @@
-_dependency_add "fzf"
+_kscfg_dependency_add "fzf"
 
 ## This must be a pipe separated list :D
 JOB_BLACKLIST="zoxide"

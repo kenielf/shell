@@ -1,4 +1,4 @@
-_dependency_add "ssh"
+_kscfg_dependency_add "ssh"
 
 _ssh_eval_agent() {
     if [ ! -S "${HOME}/.ssh/ssh_auth_sock" ]; then

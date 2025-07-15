@@ -1,10 +1,9 @@
-_dependency_add "xdg-open"
+_kscfg_dependency_add "xdg-open"
 
 ## Shorthand to open files quietly
 open() {
-    target="."
     if [ $# -ge 1 ]; then
-        xdg-open ${@} >/dev/null 2>&1 &
+        xdg-open "${@}" >/dev/null 2>&1 &
     fi
 }
 

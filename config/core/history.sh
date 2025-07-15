@@ -5,7 +5,7 @@ export HISTCONTROL=ignores
 export HISTSIZE=-1
 export HISTFILESIZE=-1
 
-_dependency_add "fzf"
+_kscfg_dependency_add "fzf"
 
 ## Select and run a command in history
 _history_interactive_run() {
