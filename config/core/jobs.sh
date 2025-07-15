@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 _kscfg_dependency_add "fzf"
 
 ## This must be a pipe separated list :D

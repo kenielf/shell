@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 ## History configuration
 export HISTFILE="${HOME}/.local/share/history"
 export HISTTIMEFORMAT="%Y-%m-%dT%H:%M:%S%z "

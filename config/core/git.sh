@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 _kscfg_dependency_add "git fzf"
 
 GIT_FETCH_TIMESTAMP_FILE="./.git/git-fetch.timestamp"

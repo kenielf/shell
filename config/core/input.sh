@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 _confirm() {
     _prompt_newline "Confirm? (y/N)"
     read -r answer

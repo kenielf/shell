@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 _kscfg_dependency_add "gpg"
 
 ## Encrypts the content passed as an argument

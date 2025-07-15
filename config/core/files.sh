@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 _kscfg_dependency_add "xdg-open"
 
 ## Shorthand to open files quietly

@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 ## A dedicated function to append text with a space separator
 _append() {
     # Separator

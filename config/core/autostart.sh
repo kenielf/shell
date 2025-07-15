@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 _KSCFG_AUTOSTART_COMMANDS=""
 
 ## Adds functions (not full commands!) to be automatically executed on startup

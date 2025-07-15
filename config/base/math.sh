@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 ## Gets the minimum of two values
 min() {
     if [ "${#}" -lt 1 ]; then

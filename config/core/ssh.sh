@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 _kscfg_dependency_add "ssh"
 
 _ssh_eval_agent() {

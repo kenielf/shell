@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 _KSCFG_SHELL_DEPENDENCIES=""
 
 ## Adds a dependency from a module to the shell dependency list
