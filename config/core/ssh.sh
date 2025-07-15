@@ -7,5 +7,5 @@ _ssh_eval_agent() {
     fi
     export SSH_AUTH_SOCK="${HOME}/.ssh/ssh_auth_sock"
 }
-_autostart_add "_ssh_eval_agent"
+_kscfg_autostart_add "_ssh_eval_agent"
 
