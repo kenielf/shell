@@ -88,6 +88,14 @@ kscfg() {
     fi
 
     case "${1}" in
+        "-e" | "enable")
+            if [ -z "${2}" ]; then
+                _error "kscfg: missing 'module' argument!"
+                return "${_KSCFG_INVALID_USAGE}"
+            fi
+            _info "enable: to-do!"
+            shift
+            ;;
         "-s" | "setup")
             _kscfg_load
             if [ "${KSCFG_DEBUG}" ]; then
