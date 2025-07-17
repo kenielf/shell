@@ -8,6 +8,24 @@ _KSCFG_SUCCESS=0
 _KSCFG_ERROR=1
 _KSCFG_INVALID_USAGE=2
 
+# String Functions
+## A dedicated function to append text with a space separator
+_append() {
+    # Separator
+    if [ "${3}" ]; then
+        separator="${3}"
+    else
+        separator=" "
+    fi
+
+    if [ -z "${1}" ]; then
+        printf -- "%s" "${2}"
+    else
+        printf -- "%s%s%s" "${1}" "${separator}" "${2}"
+    fi
+}
+
+
 # Logging Functions
 ## Simple print alias
 ## print <message:str>
@@ -37,6 +55,7 @@ export _KSCFG_LOADED=0
 # Module Functions
 export _KSCFG_MODULE_DIR="${KSCFG_DIR}/config"
 export _KSCFG_MODULES_LOADED=""
+export _KSCFG_MODULE_PATTERN="core\.*"
 _KSCFG_SHELL="$(echo "${SHELL}" | awk -F '/' '{print $NF}')"
 export _KSCFG_SHELL
 
@@ -67,18 +86,16 @@ _kscfg_load() {
     fi
 
     # Load the base modules
-    for module in "${_KSCFG_MODULE_DIR}"/{base,core}/*; do
-        # shellcheck source=/dev/null
-        . "${module}"
-        module_name="${module#"${_KSCFG_MODULE_DIR}"##}"
-        if [ -z "${_KSCFG_MODULES_LOADED}" ]; then
-            _KSCFG_MODULES_LOADED="${module_name}"
-        else
-            _KSCFG_MODULES_LOADED="${_KSCFG_MODULES_LOADED} ${module_name}"
+    for module in ${_KSCFG_MODULE_DIR}; do
+        module_name="${module##"${_KSCFG_MODULE_DIR}/"}"
+
+        # Load module if it matches with the custom pattern
+        if expr "${module_name}" : "${_KSCFG_MODULE_PATTERN}" >/dev/null; then
+            # shellcheck source=/dev/null
+            . "${module}"
+            _KSCFG_MODULES_LOADED="$(_append "${_KSCFG_MODULES_LOADED}" "${module_name}")"
         fi
     done
-
-    # Load the extra modules
 }
 
 ## The main kscfg command
