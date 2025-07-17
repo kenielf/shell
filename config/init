@@ -88,9 +88,11 @@ _kscfg_load() {
     # Load the base modules
     for module in ${_KSCFG_MODULE_DIR}; do
         module_name="${module##"${_KSCFG_MODULE_DIR}/"}"
+        _debug "kscfg: module_name = ${module_name}"
 
         # Load module if it matches with the custom pattern
         if expr "${module_name}" : "${_KSCFG_MODULE_PATTERN}" >/dev/null; then
+            _debug "kscfg: module_name '${module_name}' matches pattern"
             # shellcheck source=/dev/null
             . "${module}"
             _KSCFG_MODULES_LOADED="$(_append "${_KSCFG_MODULES_LOADED}" "${module_name}")"
