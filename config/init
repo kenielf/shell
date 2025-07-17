@@ -89,6 +89,7 @@ _kscfg_load_module() {
         _debug "kscfg: module is '${module}'"
 
         for pattern in ${_KSCFG_MODULE_PATTERNS}; do
+            _debug "kscfg: pattern to check is '${pattern}'"
             if expr "${module}" : "${pattern}"; then
                 # shellcheck source=/dev/null
                 . "${1}"
@@ -135,7 +136,7 @@ kscfg() {
             fi
 
             _KSCFG_MODULE_PATTERNS="$(_append "${_KSCFG_MODULE_PATTERNS}" "${1}")"
-            _debug "kscfg: pattern = '${_KSCFG_MODULE_PATTERN}'"
+            _debug "kscfg: pattern = '${_KSCFG_MODULE_PATTERNS}'"
             ;;
         "-s" | "setup")
             _kscfg_load_all
