@@ -139,7 +139,7 @@ kscfg() {
             fi
 
             _KSCFG_MODULE_PATTERN="$(
-                _append "${pattern_str}" "\(${1}\)" "|"
+                _append "${pattern_str}" "\(${1}\)" "\|"
             )"
             _debug "kscfg: pattern = '${_KSCFG_MODULE_PATTERN}'"
             ;;
