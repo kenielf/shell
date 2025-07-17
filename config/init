@@ -80,24 +80,34 @@ _kscfg_help() {
     print "  -r | reload)   reload the environment"
 }
 
-_kscfg_load() {
+_kscfg_load_module() {
+    if [ -z "${1}" ]; then return "${_KSCFG_INVALID_USAGE}"; fi
+
+    # if the module is a directory, load it recursively
+    if [ -f "${1}" ]; then
+        module="${1##"${_KSCFG_MODULE_DIR}"}"
+
+        if expr "${module}" : "${_KSCFG_MODULE_PATTERN}"; then
+            # shellcheck source=/dev/null
+            . "${1}"
+
+            _KSCFG_MODULES_LOADED="$(_append "${_KSCFG_MODULES_LOADED}" "${module_name}")"
+            _debug "kscfg: module '${module}' loaded."
+        fi
+    elif [ -d "${1}" ]; then
+        for item in "${1}/*"; do
+            _kscfg_load_module "${item}"
+        done
+    fi
+}
+
+_kscfg_load_all() {
     if [ "${_KSCFG_LOADED}" = 1 ]; then
         return "${_KSCFG_SUCCESS}"
     fi
 
-    # Load the base modules
-    for module in ${_KSCFG_MODULE_DIR}; do
-        module_name="${module##"${_KSCFG_MODULE_DIR}/"}"
-        _debug "kscfg: module_name = ${module_name}"
-
-        # Load module if it matches with the custom pattern
-        if expr "${module_name}" : "${_KSCFG_MODULE_PATTERN}" >/dev/null; then
-            _debug "kscfg: module_name '${module_name}' matches pattern"
-            # shellcheck source=/dev/null
-            . "${module}"
-            _KSCFG_MODULES_LOADED="$(_append "${_KSCFG_MODULES_LOADED}" "${module_name}")"
-        fi
-    done
+    # Load all modules
+    _kscfg_load_module "${_KSCFG_MODULE_DIR}"
 }
 
 ## The main kscfg command
@@ -117,7 +127,7 @@ kscfg() {
             shift
             ;;
         "-s" | "setup")
-            _kscfg_load
+            _kscfg_load_all
             if [ "${KSCFG_DEBUG}" ]; then
                 _kscfg_dependency_print
             fi
