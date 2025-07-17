@@ -25,9 +25,6 @@ _append() {
     fi
 }
 
-}
-
-
 # Logging Functions
 ## Simple print alias
 ## print <message:str>
