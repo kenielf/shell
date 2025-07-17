@@ -54,8 +54,7 @@ export _KSCFG_LOADED=0
 # Module Functions
 export _KSCFG_MODULE_DIR="${KSCFG_DIR}/config"
 export _KSCFG_MODULES_LOADED=""
-export _KSCFG_MODULE_PATTERN="core/.*"
-export _KSCFG_MODULE_HAS_CUSTOM=0
+export _KSCFG_MODULE_PATTERNS="core/.*"
 _KSCFG_SHELL="$(echo "${SHELL}" | awk -F '/' '{print $NF}')"
 export _KSCFG_SHELL
 
@@ -89,13 +88,16 @@ _kscfg_load_module() {
         module="${1##"${_KSCFG_MODULE_DIR}/"}"  # trim path prefix
         _debug "kscfg: module is '${module}'"
 
-        if expr "${module}" : "${_KSCFG_MODULE_PATTERN}"; then
-            # shellcheck source=/dev/null
-            . "${1}"
+        for pattern in ${_KSCFG_MODULE_PATTERNS}; do
+            if expr "${module}" : "${pattern}"; then
+                # shellcheck source=/dev/null
+                . "${1}"
 
-            _KSCFG_MODULES_LOADED="$(_append "${_KSCFG_MODULES_LOADED}" "${module}")"
-            _debug "kscfg: module '${module}' loaded."
-        fi
+                _KSCFG_MODULES_LOADED="$(_append "${_KSCFG_MODULES_LOADED}" "${module}")"
+                _debug "kscfg: module '${module}' loaded."
+            fi
+            break
+        done
     # if the module is a directory, load it recursively
     elif [ -d "${1}" ]; then
         for item in "${1}"/*; do
@@ -132,15 +134,7 @@ kscfg() {
                 _info "enable: to-do!"
             fi
 
-            if [ "${_KSCFG_MODULE_HAS_CUSTOM}" = 1 ]; then
-                pattern_str="${_KSCFG_MODULE_PATTERN}"
-            else
-                pattern_str="\(${_KSCFG_MODULE_PATTERN}\)"
-            fi
-
-            _KSCFG_MODULE_PATTERN="$(
-                _append "${pattern_str}" "\(${1}\)" "\|"
-            )"
+            _KSCFG_MODULE_PATTERNS="$(_append "${_KSCFG_MODULE_PATTERNS}" "${1}")"
             _debug "kscfg: pattern = '${_KSCFG_MODULE_PATTERN}'"
             ;;
         "-s" | "setup")
