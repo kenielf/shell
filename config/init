@@ -85,7 +85,7 @@ _kscfg_load_module() {
 
     # if the module is a directory, load it recursively
     if [ -f "${1}" ]; then
-        module="${1##"${_KSCFG_MODULE_DIR}"}"
+        module="${1##"${_KSCFG_MODULE_DIR}/"}"
         _debug "kscfg: module is '${module}'"
 
         if expr "${module}" : "${_KSCFG_MODULE_PATTERN}"; then
