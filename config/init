@@ -26,6 +26,7 @@ _append() {
 }
 
 
+
 # Logging Functions
 ## Simple print alias
 ## print <message:str>
@@ -126,8 +127,15 @@ kscfg() {
                 _error "kscfg: missing 'module' argument!"
                 return "${_KSCFG_INVALID_USAGE}"
             fi
-            _info "enable: to-do!"
+
             shift
+            if [ "${_KSCFG_LOADED}" = 1 ]; then
+                _info "enable: to-do!"
+            fi
+            _KSCFG_MODULE_PATTERN="$(
+                _append "${_KSCFG_MODULE_PATTERN}" "${1}" "|"
+            )"
+            _debug "kscfg: pattern = '${_KSCFG_MODULE_PATTERN}'"
             ;;
         "-s" | "setup")
             _kscfg_load_all
