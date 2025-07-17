@@ -123,6 +123,7 @@ kscfg() {
             fi
             _kscfg_dependency_check
             _kscfg_autostart_run
+            export _KSCFG_LOADED=1
             ;;
         "-l" | "list")
             for module in ${_KSCFG_MODULES_LOADED}; do
@@ -131,7 +132,7 @@ kscfg() {
             ;;
         "-r" | "reload")
             # shellcheck source=/dev/null
-            source "${HOME}/.${_KSCFG_SHELL}rc"
+            . "${HOME}/.${_KSCFG_SHELL}rc"
             ;;
         "-u" | "update")
             git -C "${KSCFG_DIR}" remote update >/dev/null 2>&1
