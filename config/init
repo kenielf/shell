@@ -96,8 +96,8 @@ _kscfg_load_module() {
 
                 _KSCFG_MODULES_LOADED="$(_append "${_KSCFG_MODULES_LOADED}" "${module}")"
                 _debug "kscfg: module '${module}' loaded."
+                break
             fi
-            break
         done
     # if the module is a directory, load it recursively
     elif [ -d "${1}" ]; then
