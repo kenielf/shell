@@ -55,7 +55,7 @@ export _KSCFG_LOADED=0
 # Module Functions
 export _KSCFG_MODULE_DIR="${KSCFG_DIR}/config"
 export _KSCFG_MODULES_LOADED=""
-export _KSCFG_MODULE_PATTERN="core\.*"
+export _KSCFG_MODULE_PATTERN="core/.*"
 _KSCFG_SHELL="$(echo "${SHELL}" | awk -F '/' '{print $NF}')"
 export _KSCFG_SHELL
 
