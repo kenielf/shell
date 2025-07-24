@@ -86,6 +86,7 @@ _kscfg_load_module() {
     # If the module is a file, check for the pattern match and load it if it does.
     if [ -f "${1}" ]; then
         module="${1##"${_KSCFG_MODULE_DIR}/"}"  # trim path prefix
+        module="${module%%.sh}"  # Trim extension suffix
         _debug "kscfg: module is '${module}'"
 
         for pattern in ${_KSCFG_MODULE_PATTERNS}; do
