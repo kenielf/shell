@@ -136,8 +136,12 @@ kscfg() {
                 _info "enable: to-do!"
             fi
 
-            _KSCFG_MODULE_PATTERNS="$(_append "${_KSCFG_MODULE_PATTERNS}" "${1}")"
-            _debug "kscfg: pattern = '${_KSCFG_MODULE_PATTERNS}'"
+            for arg in "$@"; do
+                _KSCFG_MODULE_PATTERNS="$(
+                    _append "${_KSCFG_MODULE_PATTERNS}" "${arg}"
+                )"
+                _debug "kscfg: pattern = '${_KSCFG_MODULE_PATTERNS}'"
+            done
             ;;
         "-s" | "setup")
             _kscfg_load_all
