@@ -92,9 +92,11 @@ _kscfg_load_module() {
         module="${module%%.sh}"  # Trim extension suffix
         _debug "kscfg: module is '${module}'"
 
+        # Since expr is limited in terms of pattern matching, the pattern is 
+        # checked iteratively from a space separated string
         for pattern in ${_KSCFG_MODULE_PATTERNS}; do
             _debug "kscfg: pattern to check is '${pattern}'"
-            if expr "${module}" : "${pattern}"; then
+            if expr "${module}" : "${pattern}" >/dev/null 2>&1; then
                 # shellcheck source=/dev/null
                 . "${1}"
 
