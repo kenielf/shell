@@ -1,4 +1,4 @@
-_dependency_add "nvim sudo"
+_kscfg_dependency_add "nvim sudo"
 
 ## Automatically escalate privileges when editing files
 export EDITOR=nvim

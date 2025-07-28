@@ -1,8 +1,7 @@
-_dependency_add "ffmpeg yt-dlp aria2c mediainfo"
+_kscfg_dependency_add "ffmpeg yt-dlp aria2c mediainfo"
 
-_ARIA2C_ARGS="--file-allocation=falloc"
-
-_VIDEO_FORMAT_PATTERN="mkv|mp4|webm|gif"
+export _ARIA2C_ARGS="--file-allocation=falloc"
+export _VIDEO_FORMAT_PATTERN="mkv|mp4|webm|gif"
 
 # Reencodes a video so that it is compatible with whatsapp
 whatsappify() {

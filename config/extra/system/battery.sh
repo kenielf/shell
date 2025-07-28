@@ -1,4 +1,4 @@
-_dependency_add "upower"
+_kscfg_dependency_add "upower"
 
 batinfo() {
     if [ "${1}" = "-l" ]; then

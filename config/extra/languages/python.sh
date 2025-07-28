@@ -1,4 +1,4 @@
-_dependency_add "python3"
+_kscfg_dependency_add "python3"
 
 ## Python virtual environments
 pyenv() {

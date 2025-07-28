@@ -1,4 +1,4 @@
-_dependency_add "gs"
+_kscfg_dependency_add "gs"
 
 ## Compress a pdf to a specific level
 pdf_compress() {

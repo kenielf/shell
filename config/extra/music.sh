@@ -1,4 +1,4 @@
-_dependency_add "yt-dlp"
+_kscfg_dependency_add "yt-dlp"
 
 ## Downloads a video at its highest found resolution
 dlmp3() {
