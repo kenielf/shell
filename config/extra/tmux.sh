@@ -1,11 +1,11 @@
-_dependency_add "tmux"
+_kscfg_dependency_add "tmux"
 
 _TMUX_DEFAULT_SESSION="General"
 
 ## Automatically start a tmux session on terminal instances
 _tmux_start() {
     # Limit autostart to graphical environments without nesting
-    if [ -z "${DISPLAY}" ] || [ -n "${TMUX}" ]; then
+    if [ -z "${DISPLAY}" ] || [ -n "${TMUX}" ] || [ -n "${TERM_PROGRAM}" ]; then
         return
     fi
 
@@ -21,5 +21,5 @@ _tmux_start() {
         exec tmux attach -t "${_TMUX_DEFAULT_SESSION}"
     fi
 }
-_autostart_add "_tmux_start"
+_kscfg_autostart_add "_tmux_start"
 
