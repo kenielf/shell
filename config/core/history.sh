@@ -9,7 +9,7 @@ export HISTFILESIZE=-1
 _kscfg_dependency_add "fzf"
 
 ## Select and run a command in history
-_history_interactive_run() {
+_kscfg_history_rerun() {
     # Fetch all history, sort it and remove duplicates
     cmds="$(history | \
         awk '{$1=$2=""; print $0}' | \
@@ -24,5 +24,4 @@ _history_interactive_run() {
         _confirm && eval "${command}"
     fi
 }
-alias ih="_history_interactive_run"
-bind "'\C-h':'ih\n'"
+alias ih="_kscfg_history_rerun"
