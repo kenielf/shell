@@ -178,6 +178,7 @@ gci() {
 }
 
 alias gitp="git push"
+alias gitpt="git push --tags"
 gitpu() {
     git push --set-upstream origin "$(git branch | awk '/^\*/ {print $2}')"
 }
