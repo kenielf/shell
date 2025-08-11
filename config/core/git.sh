@@ -179,5 +179,5 @@ gci() {
 
 alias gitp="git push"
 gitpu() {
-    git push --set-upstream "$(git branch | awk '/^\*/ {print $2}')"
+    git push --set-upstream origin "$(git branch | awk '/^\*/ {print $2}')"
 }
