@@ -176,3 +176,8 @@ gci() {
         git checkout "${selection}"
     fi
 }
+
+alias gitp="git push"
+gitpu() {
+    git push --set-upstream "$(git branch | awk '/^\*/ {print $2}')"
+}
