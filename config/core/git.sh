@@ -177,8 +177,24 @@ gci() {
     fi
 }
 
-alias gitp="git push"
-alias gitpt="git push --tags"
-gitpu() {
-    git push --set-upstream origin "$(git branch | awk '/^\*/ {print $2}')"
+g() {
+    case "${1}" in
+        "c") shift; git clone "${@}";;
+        "cm") shift; git commit -S -m "${@}";;
+        "s") git status;;
+        "st") git stash;;
+        "sl") git stash list;;
+        "sp") git stash pop;;
+        "p") git push;;
+        "pu") git push --set-upstream origin "$(
+                git branch | awk '/^\*/ {print $2}'
+            )";;
+        "pt") git push --tags;;
+    esac
 }
+# alias gits="git status"
+# alias gitp="git push"
+# alias gitpt="git push --tags"
+# gitpu() {
+#     git push --set-upstream origin "$(git branch | awk '/^\*/ {print $2}')"
+# }
