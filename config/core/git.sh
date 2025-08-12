@@ -131,7 +131,7 @@ _git_log_remote() {
 _export_function _git_log_remote
 
 ## Interactively change branch
-gci() {
+_kscfg_gci() {
     if [ ! -d "./.git" ]; then
         _error "git: not a repository"
         return 1
@@ -181,6 +181,7 @@ g() {
     case "${1}" in
         "c") shift; git clone "${@}";;
         "cm") shift; git commit -S -m "${@}";;
+        "ci") shift; _kscfg_gci "${@}";;
         "s") git status;;
         "st") git stash;;
         "sl") git stash list;;
