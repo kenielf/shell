@@ -182,6 +182,20 @@ g() {
         "c") shift; git clone "${@}";;
         "cm") shift; git commit -S -m "${@}";;
         "ci") shift; _kscfg_gci "${@}";;
+        "a") shift;
+            # TODO: Improve this.
+            for file in "${@}"; do
+                if git ls-files --error-unmatch "${file}" >/dev/null 2>&1; then
+                    if diff --quiet -- "${file}"; then
+                        git add "${file}"
+                    else
+                        git add -p "${file}"
+                    fi
+                else
+                    git add "${file}"
+                fi
+            done
+            ;;
         "s") git status;;
         "st") git stash;;
         "sl") git stash list;;
