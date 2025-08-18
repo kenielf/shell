@@ -25,3 +25,6 @@ _kscfg_history_rerun() {
     fi
 }
 alias ih="_kscfg_history_rerun"
+if [ "${KSCFG_ENABLE_BINDINGS}" = 1 ]; then
+    bind -x '"\C-h":"_kscfg_history_rerun"'
+fi
