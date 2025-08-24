@@ -4,9 +4,9 @@
 AUTHOR="kenielf"
 
 # Exit Codes
-_KSCFG_SUCCESS=0
-_KSCFG_ERROR=1
-_KSCFG_INVALID_USAGE=2
+export _KSCFG_SUCCESS=0
+export _KSCFG_ERROR=1
+export _KSCFG_INVALID_USAGE=2
 
 # String Functions
 ## A dedicated function to append text with a space separator
