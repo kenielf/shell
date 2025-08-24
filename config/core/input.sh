@@ -23,3 +23,6 @@ _prompt_newline() {
     fi
     printf -- "%s\n > " "${1}"
 }
+
+_kscfg_cursor_off() { tput civis; }
+_kscfg_cursor_on() { tput cvvis; }
