@@ -25,4 +25,4 @@ _prompt_newline() {
 }
 
 _kscfg_cursor_off() { tput civis; }
-_kscfg_cursor_on() { tput cvvis; }
+_kscfg_cursor_on() { tput cvvis cnorm; }
