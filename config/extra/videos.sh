@@ -2,6 +2,7 @@ _kscfg_dependency_add "ffmpeg yt-dlp aria2c mediainfo"
 
 export _ARIA2C_ARGS="--file-allocation=falloc"
 export _VIDEO_FORMAT_PATTERN="mkv|mp4|webm|gif"
+export _COOKIES_SOURCE="firefox"
 
 # Reencodes a video so that it is compatible with whatsapp
 whatsappify() {
@@ -38,7 +39,7 @@ dlvid() {
         -o "%(title)s.%(ext)s" "${url}"
 
     if [ "${cookies}" = true ]; then
-        set -- "${@}" --cookies-from-browser firefox
+        set -- "${@}" --cookies-from-browser "${_COOKIES_SOURCE}"
     fi
 
     yt-dlp "${@}" "${url}"
