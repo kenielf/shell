@@ -17,15 +17,31 @@ whatsappify() {
 
 ## Downloads a video at its highest found resolution
 dlvid() {
+    url="${1}"
+    cookies=false
     if [ -z "${1}" ]; then
         _error "videos: missing download url"
         return 1
+    elif [ "${1}" = "-c" ]; then
+        if [ -z "${2}" ]; then
+            _error "videos: missing download url"
+            return 1
+        fi
+        cookies=true
+        url="${2}"
     fi
 
-    yt-dlp \
+
+    set -- \
         -f "bestvideo*+bestaudio/best" --embed-thumbnail --add-metadata \
         --downloader "aria2c" --downloader-args="aria2c:${_ARIA2C_ARGS}" \
-        -o "%(title)s.%(ext)s" "${1}"
+        -o "%(title)s.%(ext)s" "${url}"
+
+    if [ "${cookies}" = true ]; then
+        set -- "${@}" --cookies-from-browser firefox
+    fi
+
+    yt-dlp "${@}" "${url}"
 }
 
 ## Returns the amount of frames a video contains
