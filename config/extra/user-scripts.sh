@@ -1,5 +1,5 @@
 ## Creates the folder and add it to path if needed
-_path_add() {
+_kscfg_path_add() {
     if [ -z "${1}" ]; then
         _error "user-scripts: missing path to add"
         return 1
@@ -13,6 +13,6 @@ _path_add() {
 }
 
 ## Extend path to include user scripts and binaries
-_path_add "${HOME}/.scripts/src"
-_path_add "${HOME}/.local/bin"
-_path_add "${HOME}/.cargo/bin"
+_kscfg_path_add "${HOME}/.scripts/src"
+_kscfg_path_add "${HOME}/.local/bin"
+_kscfg_path_add "${HOME}/.cargo/bin"
