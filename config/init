@@ -219,7 +219,7 @@ kscfg() {
             upstream="$(_kscfg_git rev-parse --abbrev-ref --symbolic-full-name '@{u}')"
 
             if [ "$(_kscfg_git rev-list --count "HEAD..$upstream")" -ne 0 ]; then
-                _kscfg_git pull --ff-only || return "${_KSCFG_ERROR}"
+                _kscfg_git pull --ff-only --quiet || return "${_KSCFG_ERROR}"
                 new="$(_kscfg_git rev-parse --short=8 HEAD)"
                 msg="$(_kscfg_git log -1 --format=%s HEAD)"
 
