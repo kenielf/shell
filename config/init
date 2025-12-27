@@ -212,14 +212,16 @@ kscfg() {
             . "${HOME}/.${_KSCFG_SHELL}rc"
             ;;
         "-u" | "update")
-            old="$(git -C "${KSCFG_DIR}" rev-parse --short=8 HEAD)"
-            git -C "${KSCFG_DIR}" fetch --quiet
-            upstream="$(git -C "${KSCFG_DIR}" rev-parse --abbrev-ref --symbolic-full-name '@{u}')"
+            _kscfg_git() { git -C "${KSCFG_DIR}" "$@"; }
 
-            if [ "$(git rev-list --count "HEAD..$upstream")" -ne 0 ]; then
-                git pull --ff-only || return "${_KSCFG_ERROR}"
-                new="$(git -C "${KSCFG_DIR}" rev-parse --short=8 HEAD)"
-                msg="$(git -C "${KSCFG_DIR}" log -1 --format=%s "${new}")"
+            old="$(_kscfg_git rev-parse --short=8 HEAD)"
+            _kscfg_git fetch --quiet
+            upstream="$(_kscfg_git rev-parse --abbrev-ref --symbolic-full-name '@{u}')"
+
+            if [ "$(_kscfg_git rev-list --count "HEAD..$upstream")" -ne 0 ]; then
+                _kscfg_git pull --ff-only || return "${_KSCFG_ERROR}"
+                new="$(_kscfg_git rev-parse --short=8 HEAD)"
+                msg="$(_kscfg_git log -1 --format=%s HEAD)"
 
                 _success "${old}..${new}: ${msg}"
             fi
