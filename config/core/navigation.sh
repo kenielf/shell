@@ -4,13 +4,22 @@ _kscfg_dependency_add "xclip zoxide tree eza vivid"
 # Send working directory to clipboard
 alias pwx="pwd | tr -d '\n' | xclip -sel c"
 
+## Changes directory and lists content
+lsd() {
+    if [ -z "${1}" ]; then
+        _error "navigation: missing path to access"
+        return 1
+    fi
+    cd "${1}" && ls
+}
+
 ## Creates a directory if needed and accesses it
 mkcd() {
     if [ -z "${1}" ]; then
         _error "navigation: missing path to create and access"
         return 1
     fi
-    mkdir -p "${1}" && cd "${1}"
+    mkdir -p "${1}" && cd "${1}" || return "${_KSCFG_ERROR}"
 }
 
 ## Listing
