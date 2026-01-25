@@ -167,6 +167,11 @@ _kscfg_load_all() {
     _kscfg_load_module "${_KSCFG_MODULE_DIR}"
 }
 
+_kscfg_reload() {
+    # shellcheck source=/dev/null
+    . "${HOME}/.${_KSCFG_SHELL}rc"
+}
+
 ## The main kscfg command
 kscfg() {
     if [ -z "${1}" ]; then
@@ -208,8 +213,7 @@ kscfg() {
             done
             ;;
         "-r" | "reload")
-            # shellcheck source=/dev/null
-            . "${HOME}/.${_KSCFG_SHELL}rc"
+            _kscfg_reload
             ;;
         "-u" | "update")
             _kscfg_git() { git -C "${KSCFG_DIR}" "$@"; }
@@ -225,6 +229,8 @@ kscfg() {
 
                 _success "Updated ${old}..${new}: ${msg}"
             fi
+
+            _kscfg_reload
             ;;
         "-h" | "help")
             _kscfg_help
