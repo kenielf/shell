@@ -223,7 +223,7 @@ kscfg() {
                 new="$(_kscfg_git rev-parse --short=8 HEAD)"
                 msg="$(_kscfg_git log -1 --format=%s HEAD)"
 
-                _success "${old}..${new}: ${msg}"
+                _success "Updated ${old}..${new}: ${msg}"
             fi
             ;;
         "-h" | "help")
