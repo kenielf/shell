@@ -153,7 +153,7 @@ _kscfg_load_module() {
     # if the module is a directory, load it recursively
     elif [ -d "${1}" ]; then
         for item in "${1}"/*; do
-            _kscfg_load_module "${item}" &
+            _kscfg_load_module "${item}"
         done
     fi
 }
