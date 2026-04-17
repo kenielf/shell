@@ -141,22 +141,18 @@ _kscfg_load_module() {
         # checked iteratively from a space separated string
         for pattern in ${_KSCFG_MODULE_PATTERNS}; do
             _debug "kscfg: pattern to check is '${pattern}'"
-            # shellcheck disable=SC2254
-            case $module in
-                $pattern)
-                    # shellcheck source=/dev/null
-                    . "${1}"
+            if expr "${module}" : "${pattern}" >/dev/null 2>&1; then
+                # shellcheck source=/dev/null
+                . "${1}"
 
-                    _KSCFG_MODULES_LOADED="$(_append "${_KSCFG_MODULES_LOADED}" "${module}")"
-                    _debug "kscfg: module '${module}' loaded."
-                    break
-                    ;;
-            esac
+                _KSCFG_MODULES_LOADED="$(_append "${_KSCFG_MODULES_LOADED}" "${module}")"
+                _debug "kscfg: module '${module}' loaded."
+                break
+            fi
         done
     # if the module is a directory, load it recursively
     elif [ -d "${1}" ]; then
         for item in "${1}"/*; do
-            [ -e "$item" ] || continue  # Skip empty globs
             _kscfg_load_module "${item}"
         done
     fi
