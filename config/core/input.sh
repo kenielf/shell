@@ -1,11 +1,14 @@
 # shellcheck shell=sh
 _confirm() {
-    _prompt_newline "Confirm? (y/N)"
-    read -r answer
-    if (echo "${answer}" | grep -P '^[\s]*[yY]' >/dev/null 2>&1); then
-        return 0;
+    _prompt_newline "Confirm? (y/N) "
+
+    if IFS= read -r answer </dev/tty; then
+        case ${answer} in
+            [yY]*) return 0 ;;
+        esac
     fi
-    return 1;
+
+    return 1
 }
 
 _prompt_simple() {
