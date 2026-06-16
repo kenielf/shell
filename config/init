@@ -96,6 +96,9 @@ todo() {
 # Global State
 export _KSCFG_LOADED=0
 
+# Keybinds
+export _KSCFG_BIND_PREFIX="\C-x"
+
 # Module Functions
 export _KSCFG_MODULE_DIR="${KSCFG_DIR}/config"
 export _KSCFG_MODULES_LOADED=""

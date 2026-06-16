@@ -26,5 +26,5 @@ _kscfg_history_rerun() {
 }
 alias ih="_kscfg_history_rerun"
 if [ "${KSCFG_BINDINGS}" = 1 ]; then
-    bind -x '"\C-h":"_kscfg_history_rerun"'
+    bind -x "\"${_KSCFG_BIND_PREFIX}h\":\"_kscfg_history_rerun\""
 fi
