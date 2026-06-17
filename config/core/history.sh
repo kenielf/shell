@@ -8,6 +8,7 @@ export HISTFILESIZE=-1
 
 _kscfg_dependency_add "fzf"
 
+# FIXME: cannot run confirmation when executing
 ## Select and run a command in history
 _kscfg_history_rerun() {
     # Fetch all history, sort it and remove duplicates
@@ -21,7 +22,7 @@ _kscfg_history_rerun() {
     command="$(echo "${cmds}" | fzf --info=inline --prompt="History > ")"
     if [ -n "${command}" ]; then
         echo "Running: ${command}"
-        _confirm && eval "${command}"
+        eval "${command}"
     fi
 }
 alias ih="_kscfg_history_rerun"
