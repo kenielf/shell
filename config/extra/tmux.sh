@@ -9,17 +9,25 @@ _tmux_start() {
         return
     fi
 
-    # Check if default session is started
-    sessions="$(tmux ls 2>/dev/null | cut -d: -f1)"
-    if ! (echo "${sessions}" | grep -q "${_TMUX_DEFAULT_SESSION}"); then
-        # Create it
+    # Start the default session if necessary
+    if ! tmux has-session -t "${_TMUX_DEFAULT_SESSION}" 2>/dev/null; then
         _debug "tmux: creating default session"
-        exec tmux new -s "${_TMUX_DEFAULT_SESSION}"
-    else
-        # Attach it
-        _debug "tmux: attaching default session"
-        exec tmux attach -t "${_TMUX_DEFAULT_SESSION}"
+        exec tmux new-session -s "${_TMUX_DEFAULT_SESSION}" -c "${PWD}"
     fi
+
+    # Compare requested and the default session's working directory
+    tcwd="$(
+        tmux display-message -t "${_TMUX_DEFAULT_SESSION}" \
+            -p "#{pane_current_path}"
+    )"
+    if [ "${PWD}" != "${tcwd}" ]; then
+        _debug "tmux: cwd differs (${PWD} != ${tcwd}), creating new window"
+        tmux new-window -t "${_TMUX_DEFAULT_SESSION}" -c "${PWD}"
+    fi
+
+
+    _debug "tmux: attaching default session"
+    exec tmux attach-session -t "${_TMUX_DEFAULT_SESSION}"
 }
 _kscfg_autostart_add "_tmux_start"
 
