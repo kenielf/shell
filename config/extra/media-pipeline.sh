@@ -37,6 +37,31 @@ mfmt () {
         -f ${format} pipe:1
 }
 
+mcut() {
+    # NOTE: Buffers the entire incoming NUT stream before trimming it.
+    # SS defines the starting timestamp, while TO defines the ending timestamp.
+    # Both default to 00:00:00. Streams are copied without re-encoding.
+    local SS="${1:-00:00:00}"
+    local TO="${2:-00:00:00}"
+    local INPUT
+    INPUT="$(mktemp)" || return 1
+
+    cat > "${INPUT}" || {
+        rm -f "${INPUT}"
+        return 1
+    }
+
+    ffmpeg ${_KSCFG_MPIPELINE_ARGS} \
+        -i "${INPUT}" \
+        -ss "${SS}" -to "${TO}" \
+        -map 0 -c copy \
+        -f nut pipe:1
+
+    local STATUS=$?
+    rm -f "${INPUT}"
+    return "${STATUS}"
+}
+
 mmangle () {
     # NOTE: This function re-encodes the media using conservative encoding
     # settings to maximize compatibility with platforms that enforce strict
@@ -65,6 +90,32 @@ mnorm() {
     ffmpeg ${_KSCFG_MPIPELINE_ARGS} \
       -i pipe:0 -map 0:v? -map 0:a? -c:v copy \
       -af "loudnorm=I=${I}:TP=${TP}:LRA=${LRA}" -c:a pcm_s16le \
+      -f nut pipe:1
+}
+
+mcomp() {
+    # NOTE: Re-encodes the video stream using CRF (Constant Rate Factor)
+    # to control the quality-to-file-size trade-off. Lower CRF values produce
+    # higher visual quality and larger files, while higher values produce
+    # smaller files at the expense of quality.
+    # Video is encoded using H.264, with a default CRF of 23.
+    local CRF="${1:-23}"
+
+    ffmpeg ${_KSCFG_MPIPELINE_ARGS} \
+      -i pipe:0 -map 0:v? -map 0:a? -c:a copy \
+      -crf "${CRF}" \
+      -f nut pipe:1
+}
+
+mresize() {
+    # NOTE: Resizes the video stream to the specified width and height (WxH)
+    # using FFmpeg's scale filter. Either dimension can be set to -1 to
+    # automatically preserve the input aspect ratio. Audio is copied unchanged.
+    local SIZE="${1:?Usage: mresize WxH}"
+
+    ffmpeg ${_KSCFG_MPIPELINE_ARGS} \
+      -i pipe:0 -map 0:v? -map 0:a? -c:a copy \
+      -vf "scale=${SIZE/:/x}" \
       -f nut pipe:1
 }
 
