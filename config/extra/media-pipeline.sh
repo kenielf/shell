@@ -8,7 +8,6 @@ _kscfg_dependency_add "ffmpeg"
 # The final operation converts the resulting stream into the desired output
 # format: mread ${file} | ... | mfmt mp4 > out.mp4
 #
-#
 # 1: https://ffmpeg.org/nut.html
 
 if [ "${_SHELL_DEBUG}" = 1 ]; then
@@ -40,7 +39,6 @@ mfmt () {
 mcut() {
     # NOTE: Buffers the entire incoming NUT stream before trimming it.
     # SS defines the starting timestamp, while TO defines the ending timestamp.
-    # Both default to 00:00:00. Streams are copied without re-encoding.
     local SS="${1:-00:00:00}"
     local TO="${2:-00:00:00}"
     local INPUT
@@ -67,8 +65,7 @@ mmangle () {
     # settings to maximize compatibility with platforms that enforce strict
     # media format requirements (e.g. WhatsApp). This includes using H.264
     # Baseline Profile, Level 3.0, and YUV420p for video, alongside stereo
-    # audio. The output remains in NUT format to allow further processing
-    # within the pipeline.
+    # audio.
     ffmpeg ${_KSCFG_MPIPELINE_ARGS} \
         -i pipe:0 -map 0 \
         -c:v libx264 -profile:v baseline -level:v 3.0 -pix_fmt yuv420p -ac 2 \
@@ -94,11 +91,10 @@ mnorm() {
 }
 
 mcomp() {
-    # NOTE: Re-encodes the video stream using CRF (Constant Rate Factor)
+    # NOTE: Re-encodes the video stream using H264 + CRF (Constant Rate Factor)
     # to control the quality-to-file-size trade-off. Lower CRF values produce
     # higher visual quality and larger files, while higher values produce
     # smaller files at the expense of quality.
-    # Video is encoded using H.264, with a default CRF of 23.
     local CRF="${1:-23}"
 
     ffmpeg ${_KSCFG_MPIPELINE_ARGS} \
@@ -110,7 +106,7 @@ mcomp() {
 mresize() {
     # NOTE: Resizes the video stream to the specified width and height (WxH)
     # using FFmpeg's scale filter. Either dimension can be set to -1 to
-    # automatically preserve the input aspect ratio. Audio is copied unchanged.
+    # automatically preserve the input aspect ratio.
     local SIZE="${1:?Usage: mresize WxH}"
 
     ffmpeg ${_KSCFG_MPIPELINE_ARGS} \
