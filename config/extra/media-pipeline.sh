@@ -26,13 +26,14 @@ mfmt () {
     local extra
     local format="${1}"
     case "${format}" in
-        mp4) extra="-movflags +frag_keyframe+empty_moov" ;;
-        mkv) format="matroska" ;;
-        *) extra="" ;;
+        mp3) extra="-map 0:a:0 -vn -c:a libmp3lame" ;;
+        mp4) extra="-map 0 -c copy -movflags +frag_keyframe+empty_moov" ;;
+        mkv) format="matroska"; extra="-map 0 -c copy" ;;
+        *) extra="-map 0 -c copy" ;;
     esac
 
     ffmpeg ${_KSCFG_MPIPELINE_ARGS} \
-        -i pipe:0 -map 0 -map_metadata -1 -c copy ${extra} \
+        -i pipe:0 -map_metadata -1 ${extra} \
         -f ${format} pipe:1
 }
 
