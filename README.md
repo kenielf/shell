@@ -9,6 +9,9 @@ support for autostarting custom functions automatically.
 This allows me to reuse core functions when needed, whilst also keeping the
 flexibility to add or remove modules as I like.
 
+## Documentation
+Module documentation lives in [`docs/`](/docs/README.md).
+
 ## Creating your own modules
 You can add your own custom modules by creating a `.sh` file (POSIX syntax is 
 strongly recommended) and following these rules:
