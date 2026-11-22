@@ -405,6 +405,43 @@ _kscfg_gadd() {
     fi
 }
 
+## Signed commit, drafting the message with gmsg when no message is given
+## _kscfg_gcm [<message> | -h <hint>...]
+##   <message>: plain `git commit -S -m <message>`
+##   -h <hint>: hint for gmsg (repeatable), the draft opens in the editor
+_kscfg_gcm() {
+    case "${1}" in
+        ""|"-h"|"--hint") ;;
+        *) git commit -S -m "${@}"; return;;
+    esac
+
+    if ! command -v gmsg >/dev/null 2>&1; then
+        if [ "${#}" -gt 0 ]; then
+            _error "git: hints require gmsg, which was not found"
+            return 1
+        fi
+        git commit -S
+        return
+    fi
+
+    if git diff --cached --quiet; then
+        _error "git: no staged changes"
+        return 1
+    fi
+
+    # Equivalent to `git commit -e -F <(gmsg ...)`, which is not POSIX
+    _g_msg="$(mktemp)" || return 1
+    if gmsg "${@}" > "${_g_msg}" && [ -s "${_g_msg}" ]; then
+        git commit -S -e -F "${_g_msg}"
+        _g_status="${?}"
+    else
+        _error "git: gmsg failed to draft a message"
+        _g_status=1
+    fi
+    rm -f "${_g_msg}"
+    return "${_g_status}"
+}
+
 ## Push, setting the upstream only when it is not already origin/<branch>
 ## _kscfg_gpu [git push options]
 _kscfg_gpu() {
@@ -445,7 +482,7 @@ wr|[-f]|Removes a worktree interactively.
 wp||Prunes stale worktrees.
 ||
 a|[paths...]|Stages untracked files whole, tracked changes by hunk.
-cm|<message>|Creates a signed commit.
+cm|[<msg> | -h <hint>...]|Signed commit (no msg: drafted by gmsg).
 s||Shows the status.
 ||
 st||Moves changes to the stash.
@@ -462,7 +499,7 @@ g() {
     case "${1}" in
         "h") _kscfg_ghelp;;                         # Usage
         "c") shift; _kscfg_gclone "${@}";;          # Clone
-        "cm") shift; git commit -S -m "${@}";;      # Commit
+        "cm") shift; _kscfg_gcm "${@}";;            # Commit
         "ci") shift; _kscfg_gci "${@}";;            # Change Branch
         "a") shift; _kscfg_gadd "${@}";;            # Add
         "s") git status;;                           # Status
