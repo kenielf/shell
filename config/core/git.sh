@@ -377,6 +377,84 @@ _kscfg_gwr() {
     git worktree remove "${@}" "${_g_path}"
 }
 
+## Remove worktrees (and their branches) whose upstream is gone from the remote
+## _kscfg_gwc [-n] [-f]
+##   -n: dry run, only list what would be removed
+##   -f: also remove worktrees with local changes
+## Branches that never had an upstream (unpushed, e.g. fresh `g wn`) are kept.
+_kscfg_gwc() {
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        _error "git: not a repository"
+        return 1
+    fi
+
+    _g_dry=false
+    _g_force=""
+    while [ "${#}" -gt 0 ]; do
+        case "${1}" in
+            "-n") _g_dry=true;;
+            "-f") _g_force="-f";;
+            *) _error "git: unknown option '${1}'"; return 1;;
+        esac
+        shift
+    done
+
+    # Prune deleted remote branches so their upstreams show up as gone
+    _info "git: fetching branches"
+    git fetch --all --prune >/dev/null || return 1
+    touch "$(_kscfg_git_common_dir)/${GIT_FETCH_TIMESTAMP_FILE}"
+    git worktree prune
+
+    _g_gone="$(
+        git for-each-ref --format='%(refname:short)|%(upstream:track)' \
+            refs/heads | awk -F '|' '$2 == "[gone]" { printf "%s ", $1 }'
+    )"
+
+    # "<branch>\t<path>" for each worktree on a gone branch, skipping the
+    # first entry (the main worktree, or the bare repository itself)
+    _g_list="$(
+        git worktree list --porcelain | awk -v gone="${_g_gone}" '
+            BEGIN { n = split(gone, a, " "); for (i = 1; i <= n; i++) g[a[i]] }
+            /^worktree / { path = substr($0, 10); idx++ }
+            /^branch refs\/heads\// {
+                b = substr($0, 19)
+                if (idx > 1 && (b in g)) print b "\t" path
+            }
+        '
+    )"
+    if [ -z "${_g_list}" ]; then
+        _info "git: no worktrees to clean"
+        return 0
+    fi
+
+    print "Worktrees whose branch is gone from the remote:"
+    printf -- "%s\n" "${_g_list}" | while IFS="$(printf '\t')" read -r _g_b _g_p; do
+        printf -- "  \e[34m%s\e[00m  %s\n" "${_g_b}" "${_g_p}"
+    done
+    [ "${_g_dry}" = true ] && return 0
+    _confirm || return 0
+
+    _g_status=0
+    _g_tab="$(printf '\t')"
+    _g_root="$(_kscfg_git_worktree_root)"
+    while IFS="${_g_tab}" read -r _g_b _g_p; do
+        # Step out of the worktree before removing it
+        case "${PWD}/" in
+            "${_g_p}/"*) cd "${_g_root}" || return 1;;
+        esac
+
+        _info "git: removing worktree '${_g_p}'"
+        if git worktree remove ${_g_force} "${_g_p}"; then
+            git branch -D "${_g_b}"
+        else
+            _g_status=1
+        fi
+    done <<EOF
+${_g_list}
+EOF
+    return "${_g_status}"
+}
+
 ## Stage changes: untracked files whole, tracked changes interactively
 ## _kscfg_gadd [pathspec...]  (defaults to the current directory)
 _kscfg_gadd() {
@@ -480,6 +558,7 @@ w||Lists worktrees.
 wn|[-c] <branch> [base]|Creates a branch in a new worktree (-c: git switch -c).
 wr|[-f]|Removes a worktree interactively.
 wp||Prunes stale worktrees.
+wc|[-n] [-f]|Removes worktrees whose branch is gone from the remote.
 ||
 a|[paths...]|Stages untracked files whole, tracked changes by hunk.
 cm|[<msg> | -h <hint>...]|Signed commit (no msg: drafted by gmsg).
@@ -513,6 +592,7 @@ g() {
         "wn") shift; _kscfg_gwn "${@}";;            # New Branch/Worktree
         "wr") shift; _kscfg_gwr "${@}";;            # Remove Worktree
         "wp") git worktree prune -v;;               # Prune Worktree
+        "wc") shift; _kscfg_gwc "${@}";;            # Clean Worktrees
         "") _kscfg_ghelp;;                          # Usage (no command)
         *) _error "g: unknown command '${1}'"; _kscfg_ghelp; return 1;;
     esac

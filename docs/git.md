@@ -22,6 +22,7 @@ of checking it out in place.
 | `g w`                 | List worktrees                                              |
 | `g wr [-f]`           | Pick a worktree with fzf and remove it                      |
 | `g wp`                | Prune stale worktree metadata                               |
+| `g wc [-n] [-f]`      | Remove worktrees (and branches) whose upstream was deleted on the remote |
 | `git-change-key`      | Interactively pick the GPG signing key for this repository  |
 
 ## Layout
@@ -83,6 +84,17 @@ accepted by `g c -c`.
 ### `g wr`
 Steps out of the selected worktree first if you are inside it. Extra arguments
 go to `git worktree remove` (e.g. `-f` for worktrees with local changes).
+
+### `g wc`
+- Fetches with `--prune`, then picks worktrees whose branch tracks an upstream
+  that no longer exists (e.g. merged and deleted PR branches).
+- Lists them and asks for confirmation, then removes each worktree and
+  deletes its local branch (`git branch -D` prints the old tip, should you
+  need to restore it).
+- Branches that never had an upstream (unpushed `g wn` branches) are kept, as
+  is the main worktree. Steps out of a removed worktree if you are inside it.
+- `-n` only lists; `-f` also removes worktrees with local changes (otherwise
+  they are skipped with git's error).
 
 ## Configuration
 | Variable                   | Default                         | Meaning                           |
