@@ -1,6 +1,7 @@
 # shellcheck shell=sh
+## _confirm [message]  (defaults to "Confirm?")
 _confirm() {
-    _prompt_newline "Confirm? (y/N)"
+    _prompt_newline "${1:-Confirm?} (y/N)"
     read -r answer
     if (echo "${answer}" | grep -P '^[\s]*[yY]' >/dev/null 2>&1); then
         return 0;

@@ -20,13 +20,15 @@ _kscfg_history_rerun() {
     # Execute the commands given the user input
     command="$(echo "${cmds}" | fzf --info=inline --prompt="History > ")"
     if [ -n "${command}" ]; then
-        echo "Running: ${command}"
         # Under `bind -x` readline leaves the tty raw (-icanon -echo -icrnl),
-        # so prompts in the command never see Enter; run it in cooked mode
+        # so prompts never see Enter; confirm and run in cooked mode
         _h_stty="$(stty -g 2>/dev/null)"
         stty icanon echo icrnl 2>/dev/null
-        eval "${command}"
-        _h_status=$?
+        _h_status=0
+        if _confirm "Run: ${command}"; then
+            eval "${command}"
+            _h_status=$?
+        fi
         [ -n "${_h_stty}" ] && stty "${_h_stty}" 2>/dev/null
         unset _h_stty
         return "${_h_status}"
