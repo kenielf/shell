@@ -9,6 +9,8 @@ of checking it out in place.
 | Command               | Does                                                       |
 | --------------------- | ---------------------------------------------------------- |
 | `g h` / `g`           | Show usage (also shown on unknown commands)                 |
+| `g i <dir> [branch]`  | Create a new repo with the bare + worktree layout, `cd` into it |
+| `g i -c <args...>`    | Plain `git init <args...>`                                  |
 | `g c <url> [dir]`     | Clone as a bare repo + worktree layout, `cd` into it        |
 | `g c -c <args...>`    | Plain `git clone <args...>`                                 |
 | `g ci [-f] [-c]`      | Pick a branch with fzf and `cd` to its worktree             |
@@ -26,7 +28,7 @@ of checking it out in place.
 | `git-change-key`      | Interactively pick the GPG signing key for this repository  |
 
 ## Layout
-`g c` produces:
+`g c` and `g i` produce:
 ```
 project/
   .bare/        # the repository itself
@@ -54,6 +56,16 @@ the repository, in `<repo>.worktrees/<branch>/`.
 
 Refuses to run if `<dir>` already exists. Extra `git clone` flags are only
 accepted by `g c -c`.
+
+### `g i`
+1. `git init --bare` into `<dir>/.bare` with `[branch]` as its first branch
+   (default: `init.defaultBranch`, else `main`), and writes the `.git` file.
+2. Adds that branch's worktree with `git worktree add --orphan` (git 2.42+)
+   and `cd`s into it, ready for the first commit.
+
+Accepts an existing empty `<dir>` (e.g. `g i .`), refuses a non-empty one.
+There is no remote: add one with `git remote add origin <url>` (it gets the
+usual `origin/*` tracking), then `g pu` sets the branch's upstream.
 
 ### `g ci`
 - Lists local and `origin/*` branches, previewing each one's log.

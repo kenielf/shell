@@ -223,6 +223,47 @@ _kscfg_gclone() {
     fi
 }
 
+## Create a new bare repository with a worktree for its first branch
+## _kscfg_ginit [-c] <directory> [branch]
+##   branch: first branch, defaults to init.defaultBranch (or main)
+##   -c: classic `git init` (remaining arguments are passed through)
+_kscfg_ginit() {
+    if [ "${1}" = "-c" ]; then
+        shift
+        git init "${@}"
+        return
+    fi
+
+    if [ -z "${1}" ]; then
+        _error "git: missing directory"
+        return 1
+    fi
+
+    _g_dir="${1%/}"
+    _g_branch="${2:-$(git config --get init.defaultBranch || echo main)}"
+    if [ -e "${_g_dir}" ] && [ -n "$(ls -A "${_g_dir}" 2>/dev/null)" ]; then
+        _error "git: '${_g_dir}' already exists and is not empty"
+        return 1
+    elif ! git check-ref-format --branch "${_g_branch}" >/dev/null 2>&1; then
+        _error "git: '${_g_branch}' is not a valid branch name"
+        return 1
+    fi
+
+    _info "git: creating repository '${_g_dir}'"
+    git init --quiet --bare -b "${_g_branch}" "${_g_dir}/.bare" || return 1
+    printf -- "gitdir: ./.bare\n" > "${_g_dir}/.git"
+
+    # The branch has no commits yet, so its worktree starts as an orphan
+    _g_path="$(printf -- "%s" "${_g_branch}" | tr '/' '-')"
+    if git -C "${_g_dir}" worktree add --quiet --orphan -b "${_g_branch}" \
+        "${_g_path}" >/dev/null 2>&1; then
+        cd "${_g_dir}/${_g_path}" || return 1
+    else
+        _warn "git: could not create a worktree for '${_g_branch}'"
+        cd "${_g_dir}" || return 1
+    fi
+}
+
 ## Move to the worktree of <branch>, creating it if needed
 ## _kscfg_git_goto <branch> [base]
 ##   base: create <branch> as a new branch starting at <base>
@@ -554,6 +595,7 @@ _kscfg_ghelp() {
     done <<EOF
 h||Shows this usage.
 ||
+i|[-c] <dir> [branch]|Creates a bare repo + worktree (-c: plain git init).
 c|[-c] <url> [dir]|Clones as bare repo + worktrees (-c: plain git clone).
 ci|[-f] [-c]|Switches to a branch's worktree (-f: fetch, -c: checkout).
 w||Lists worktrees.
@@ -579,6 +621,7 @@ EOF
 g() {
     case "${1}" in
         "h") _kscfg_ghelp;;                         # Usage
+        "i") shift; _kscfg_ginit "${@}";;           # Init
         "c") shift; _kscfg_gclone "${@}";;          # Clone
         "cm") shift; _kscfg_gcm "${@}";;            # Commit
         "ci") shift; _kscfg_gci "${@}";;            # Change Branch
