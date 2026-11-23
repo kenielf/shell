@@ -230,9 +230,9 @@ kscfg() {
             if [ "$(_kscfg_git rev-list --count "HEAD..$upstream")" -ne 0 ]; then
                 _kscfg_git pull --ff-only --quiet || return "${_KSCFG_ERROR}"
                 new="$(_kscfg_git rev-parse --short=8 HEAD)"
-                msg="$(_kscfg_git log -1 --format=%s HEAD)"
 
-                _success "Updated ${old}..${new}: ${msg}"
+                _success "Updated ${old}..${new}:"
+                _kscfg_git log --reverse --format='  %h %s' "${old}..${new}"
             fi
 
             _kscfg_reload
