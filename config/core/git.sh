@@ -484,18 +484,20 @@ _kscfg_gadd() {
 }
 
 ## Signed commit, drafting the message with gmsg when no message is given
-## _kscfg_gcm [<message> | -h <hint>...]
-##   <message>: plain `git commit -S -m <message>`
-##   -h <hint>: hint for gmsg (repeatable), the draft opens in the editor
+## _kscfg_gcm [<message> | [-h <hint>]... [-t <ticket>]]
+##   <message>:   plain `git commit -S -m <message>`
+##   -h <hint>:   hint for gmsg (repeatable), the draft opens in the editor
+##   -t <ticket>: ticket for gmsg's "Refs:" footer and context; when omitted,
+##                gmsg picks it from $FORCE_ID or the branch name (PROJ-123)
 _kscfg_gcm() {
     case "${1}" in
-        ""|"-h"|"--hint") ;;
+        ""|"-h"|"--hint"|"-t"|"--ticket") ;;
         *) git commit -S -m "${@}"; return;;
     esac
 
     if ! command -v gmsg >/dev/null 2>&1; then
         if [ "${#}" -gt 0 ]; then
-            _error "git: hints require gmsg, which was not found"
+            _error "git: hints and tickets require gmsg, which was not found"
             return 1
         fi
         git commit -S
@@ -561,7 +563,7 @@ wp||Prunes stale worktrees.
 wc|[-n] [-f]|Removes worktrees whose branch is gone from the remote.
 ||
 a|[paths...]|Stages untracked files whole, tracked changes by hunk.
-cm|[<msg> | -h <hint>...]|Signed commit (no msg: drafted by gmsg).
+cm|[<msg> | -h <hint>... -t <ticket>]|Signed commit (no msg: drafted by gmsg).
 s||Shows the status.
 ||
 st||Moves changes to the stash.

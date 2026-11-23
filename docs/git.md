@@ -14,7 +14,7 @@ of checking it out in place.
 | `g ci [-f] [-c]`      | Pick a branch with fzf and `cd` to its worktree             |
 | `g a [paths...]`      | Stage changes (untracked whole, tracked hunk by hunk)       |
 | `g cm <msg>`          | Signed commit (`git commit -S -m`)                          |
-| `g cm [-h <hint>]...` | Signed commit drafted by `gmsg` (if installed), opened in the editor for review; plain `git commit -S` without gmsg |
+| `g cm [-h <hint>]... [-t <ticket>]` | Signed commit drafted by `gmsg` (if installed), opened in the editor for review; plain `git commit -S` without gmsg. The ticket (`Refs:` footer + its earlier commits as context) comes from `-t`, then `$FORCE_ID`, then a `PROJ-123` key in the branch name; `-t ''` disables it |
 | `g s`                 | `git status`                                                |
 | `g st` / `sl` / `sp`  | `git stash` / `stash list` / `stash pop`                    |
 | `g p` / `pu` / `pt`   | Push / push, setting upstream to `origin/<branch>` only if not already set / push tags |
